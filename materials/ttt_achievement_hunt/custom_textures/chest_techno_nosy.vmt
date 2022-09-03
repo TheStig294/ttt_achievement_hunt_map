@@ -1,0 +1,8 @@
+"LightmappedGeneric"
+{
+	"$baseTexture" "ttt_achievement_hunt/custom_textures/chest_techno_nosy"
+	"$surfaceprop" "wood"
+	"$nodecal" "1"
+	"$selfillum" "1"
+	"$selfillummaskscale" "1"
+}

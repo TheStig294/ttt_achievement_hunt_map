@@ -1,0 +1,7 @@
+"LightmappedGeneric"
+{
+	"$basetexture" "ttt_achievement_hunt/monitor_textures/aluminum"
+	"$translucent" "1"
+	"$decal" "1"
+	"$decalscale" "0.23"
+}

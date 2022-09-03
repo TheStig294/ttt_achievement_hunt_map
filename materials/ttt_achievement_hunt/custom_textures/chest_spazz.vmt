@@ -1,0 +1,18 @@
+"LightmappedGeneric"
+{
+	"$baseTexture" "ttt_achievement_hunt/custom_textures/chest_spazz"
+	"$surfaceprop" "wood"
+	"$nodecal" "1"
+	"$selfillum" "1"
+	"$selfillummaskscale" "1"
+	
+	"Proxies"
+	{
+		"AnimatedTexture"
+		{
+			"animatedTextureVar" "$basetexture" //What to animate. Can also be $detail and $bumpmap
+			"animatedTextureFrameNumVar" "$frame"
+			"animatedTextureFrameRate" "20" //FPS HERE
+		}
+	}
+}

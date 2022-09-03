@@ -1,0 +1,16 @@
+"LightmappedGeneric"
+{
+	"$basetexture" "ttt_achievement_hunt/minecraft_original/conveyor_belt"
+	"$surfaceprop" "metal"
+	"$nodecal" "1"
+
+	"Proxies"
+	{
+		"TextureScroll"
+		{
+			"texturescrollvar"	"$basetexturetransform"
+			"texturescrollrate"	"2"
+			"texturescrollangle"	"-90"
+		}
+	}
+}

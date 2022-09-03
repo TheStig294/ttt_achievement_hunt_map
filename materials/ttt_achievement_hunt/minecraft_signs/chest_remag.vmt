@@ -1,0 +1,7 @@
+"LightmappedGeneric"
+{
+	"$basetexture" "ttt_achievement_hunt/minecraft_signs/chest_remag"
+	"$translucent" "1"
+	"$decal" "1"
+	"$decalscale" "0.08"
+}

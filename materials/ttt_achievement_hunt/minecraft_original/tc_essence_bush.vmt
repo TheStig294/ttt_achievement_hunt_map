@@ -1,0 +1,17 @@
+"LightmappedGeneric"
+{
+	"$basetexture" "ttt_achievement_hunt/minecraft_original/tc_essence_bush"
+	"$surfaceprop" "glass"
+	"$translucent" "1"
+
+
+	"Proxies"
+	{
+		"AnimatedTexture"
+		{
+			"animatedTextureVar" 			"$basetexture" //What to animate. Can also be $detail and $bumpmap
+			"animatedTextureFrameNumVar"	"$frame"
+			"animatedTextureFrameRate" 		"20" //FPS HERE
+		}
+	}
+}

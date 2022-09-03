@@ -1,0 +1,27 @@
+"UnlitGeneric"
+{
+	"%tooltexture" "ttt_achievement_hunt\eNnerGy\Minecraft\lava"
+	"%compilewater" "1"
+	"%compileKeepLight" 1
+
+	"$basetexture"	"ttt_achievement_hunt\eNnerGy\Minecraft\lava"
+	"$surfaceprop" "water"
+	
+	"$abovewater" "1"
+
+	"$fogenable" 1
+	"$fogcolor" "{219 63 0}"
+	"$fogstart" "-400"
+	"$fogend" "1000"
+	"$bottommaterial" "ttt_achievement_hunt\eNnerGy\Minecraft\lava"
+
+	"Proxies"
+{
+"AnimatedTexture"
+{
+"animatedTextureVar" "$basetexture"
+"animatedTextureFrameNumVar" "$frame"
+"animatedTextureFrameRate" "20.0"
+}
+}
+}

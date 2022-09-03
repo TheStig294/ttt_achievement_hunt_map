@@ -1,0 +1,8 @@
+"UnlitGeneric"
+{
+	"$baseTexture" "ttt_achievement_hunt/custom_textures/chest_stig_playermodel_bottom"
+	"$surfaceprop" "wood"
+	"$nodecal" "1"
+	// "$selfillum" "1"
+	// "$selfillummaskscale" "1"
+}

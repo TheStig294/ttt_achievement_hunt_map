@@ -1,0 +1,5 @@
+"vertexlitgeneric" {
+    "$basetexture" "models\ttt_achievement_hunt\MCModelPack\items\meat-2"
+    "$halflambert" "1"
+    "$surfaceprop" "Mflesh"
+}

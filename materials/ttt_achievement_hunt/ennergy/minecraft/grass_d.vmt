@@ -1,0 +1,8 @@
+"LightmappedGeneric"
+{
+	"$basetexture"	"ttt_achievement_hunt\eNnerGy\Minecraft\grass_d"
+	"$surfaceprop"	"grass"
+	"$reflectivity" "[0.675 0.675 0.675]"
+
+    "$color2" "{80 255 26}"
+}

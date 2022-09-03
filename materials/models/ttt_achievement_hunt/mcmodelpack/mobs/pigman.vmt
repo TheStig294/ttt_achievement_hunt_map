@@ -1,0 +1,7 @@
+"vertexlitgeneric" {
+    "$basetexture" "models\ttt_achievement_hunt\MCModelPack\mobs\pigman"
+    "$surfaceprop" "flesh"
+    "$alphatest"   "1"
+    "$halflambert" "1"
+    "$model"       "1"
+}

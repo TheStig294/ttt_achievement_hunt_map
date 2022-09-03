@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{	"$basetexture" "skybox\ttt_achievement_huntUP"
+	"$nofog" 1
+	"$ignorez" 1
+}

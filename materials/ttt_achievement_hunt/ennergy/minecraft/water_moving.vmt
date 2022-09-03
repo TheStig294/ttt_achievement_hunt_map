@@ -1,0 +1,42 @@
+"LightmappedGeneric"
+{
+	"%tooltexture" "ttt_achievement_hunt/eNnerGy/Minecraft/water"
+	"%compilewater" "1"
+	"%compileKeepLight" 1
+
+
+	"$basetexture" "ttt_achievement_hunt/eNnerGy/Minecraft/water"
+	"$surfaceprop" "water"
+	"$alpha" "0.92"
+
+	"$abovewater" "1"
+
+	"$fogenable" 1
+	"$fogcolor" "{11 3 200}"
+	"$fogstart" "-400"
+	"$fogend" "1000"
+
+	"$bottommaterial" "ttt_achievement_hunt/eNnerGy/Minecraft/water"
+
+	"Proxies"
+	{
+		"AnimatedTexture"
+		{
+			"animatedtexturevar" "$basetexture"
+			"animatedtextureframenumvar" "$frame"
+			"animatedtextureframerate" 15.00
+		}
+
+		"TextureScroll"
+			{
+				"texturescrollvar"	"$basetexturetransform"
+				"texturescrollrate"	"0.4"
+				"texturescrollangle"	"0"
+			}
+
+	"WaterLOD"
+		{
+		}
+	}
+}
+

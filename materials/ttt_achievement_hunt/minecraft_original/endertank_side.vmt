@@ -1,0 +1,10 @@
+"LightmappedGeneric"
+{
+	"$basetexture" "ttt_achievement_hunt/minecraft_original/endertank_side"
+	"$surfaceprop" "glass"
+	"$translucent" "1"
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[1 1 1]"
+	"$envmapcontrast" "1"
+	"$envmapsaturation" "0"
+}

@@ -1,0 +1,15 @@
+"LightMappedGeneric"
+{
+	"$baseTexture" "ttt_achievement_hunt/custom_textures/star_wars"
+	"$translucent"	"1"
+	"$surfaceprop" "glass"
+	"Proxies"
+	{
+		"AnimatedTexture"
+		{
+			"animatedTextureVar" "$basetexture" //What to animate. Can also be $detail and $bumpmap
+			"animatedTextureFrameNumVar" "$frame"
+			"animatedTextureFrameRate" "10" //FPS HERE
+		}
+	}
+}

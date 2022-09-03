@@ -1,0 +1,5 @@
+"vertexlitgeneric" {
+    "$basetexture" "models\ttt_achievement_hunt\MCModelPack\items\bow"
+    "$halflambert" "1"
+    "$surfaceprop" "Mwood"
+}

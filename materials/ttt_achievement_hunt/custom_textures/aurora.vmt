@@ -1,0 +1,14 @@
+"LightMappedGeneric"
+{
+	"$baseTexture" "ttt_achievement_hunt/custom_textures/aurora"
+	"$surfaceprop" "glass"
+	"Proxies"
+	{
+		"AnimatedTexture"
+		{
+			"animatedTextureVar" "$basetexture" //What to animate. Can also be $detail and $bumpmap
+			"animatedTextureFrameNumVar" "$frame"
+			"animatedTextureFrameRate" "10" //FPS HERE
+		}
+	}
+}

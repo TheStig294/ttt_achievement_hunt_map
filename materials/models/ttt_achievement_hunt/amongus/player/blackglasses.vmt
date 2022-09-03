@@ -1,0 +1,9 @@
+"UnlitGeneric"
+{
+	"$basetexture" "models/ttt_achievement_hunt/amongus/player/black"
+	"$bumpmap" "models/ttt_achievement_hunt/amongus/player/normal"
+
+	"$model" "1"
+
+	$nocull "1"
+}

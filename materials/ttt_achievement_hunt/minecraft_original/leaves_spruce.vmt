@@ -1,0 +1,7 @@
+"LightmappedGeneric"
+{
+	"$basetexture" "ttt_achievement_hunt/minecraft_original/leaves_spruce"
+	"$surfaceprop" "foliage"
+	// "$translucent" "1"
+	"$color" "{102 255 51}"
+}

@@ -1,0 +1,7 @@
+"LightmappedGeneric"
+{
+	"$basetexture" "ttt_achievement_hunt/custom_textures/head_watchdog"
+	"$translucent" "1"
+	"$decal" "1"
+	"$decalscale" "0.75"
+}

@@ -1,0 +1,6 @@
+"vertexlitGeneric"
+{
+	"$basetexture" "models/ttt_achievement_hunt/crown/gold3"
+	"$halflambert" 1
+	"$nocull" 1
+}
