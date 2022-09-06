@@ -111,53 +111,44 @@ _ttt_achievement_hunt_block_among_us_ 0
 # Credits
 Track: Disfigure - Blank [NCS Release]\
 Music provided by NoCopyrightSounds.\
-Watch: https://youtu.be/p7ZsBPK656s\
+Watch: https://youtu.be/p7ZsBPK656s \
 Free Download / Stream: https://ncs.io/Blank
 
 'Ambience, Night Wildlife, A' by InspectorJ\
-https://freesound.org/people/InspectorJ/sounds/352514/\
+https://freesound.org/people/InspectorJ/sounds/352514/ \
 License: https://creativecommons.org/licenses/by/4.0/
 
-Future Bass Type Beat, Trap, EDM Instrumental\
-( No Copyright Sound ) ( FREE USE MUSIC )\
-Punch Deck - Neon Underworld\
-License: https://creativecommons.org/licenses/by/3.0/
-
-'Late Night Radio' Kevin MacLeod (https://incompetech.com)\
-Licensed under Creative Commons: By Attribution 4.0 License\
+'Late Night Radio' Kevin MacLeod (https://incompetech.com) \
+Licensed under Creative Commons: By Attribution 4.0 License \
 http://creativecommons.org/licenses/by/4.0/
 
-'Cartoon Toy Whistle' by Mixkit (https://mixkit.co/free-sound-effects/cartoon/)\
-Licensed under Mixkit Sound Effects Free License\
+'Cartoon Toy Whistle' by Mixkit (https://mixkit.co/free-sound-effects/cartoon/) \
+Licensed under Mixkit Sound Effects Free License \
 https://mixkit.co/license/#sfxFree
 
-'Custom Comic Book Font' by bdcraft.net\
-https://bdcraft.net/downloads/purebdcraft-minecraft/font-addon/\
-Licensed under SIL OPEN FONT LICENSE\
+'Custom Comic Book Font' by bdcraft.net \
+https://bdcraft.net/downloads/purebdcraft-minecraft/font-addon/ \
+Licensed under SIL OPEN FONT LICENSE \
 https://scripts.sil.org/OFL
 
-'steam long.wav' by Hampusnoren\
-https://freesound.org/people/Hampusnoren/sounds/564936/\
+'steam long.wav' by Hampusnoren \
+https://freesound.org/people/Hampusnoren/sounds/564936/ \
 License: https://creativecommons.org/licenses/by/4.0/
 
-'Happy Happy Game Show' Kevin MacLeod (incompetech.com)\
-Licensed under Creative Commons: By Attribution 4.0 License\
+'Happy Happy Game Show' Kevin MacLeod (incompetech.com) \
+Licensed under Creative Commons: By Attribution 4.0 License \
 http://creativecommons.org/licenses/by/4.0/
 
-'Funk Game Loop' Kevin MacLeod (incompetech.com)\
-Licensed under Creative Commons: By Attribution 4.0 License\
-http://creativecommons.org/licenses/by/4.0/
-
-'Among Us Crewmate + Corpse Model' by JuanG3D\
-Licensed under Creative Commons: By Attribution 4.0 License\
+'Among Us Crewmate + Corpse Model' by JuanG3D \
+Licensed under Creative Commons: By Attribution 4.0 License \
 http://creativecommons.org/licenses/by/4.0/
 
 Among Us playermodel by Bytewave and Adam:\
-https://steamcommunity.com/sharedfiles/filedetails/?id=2313802230\
+https://steamcommunity.com/sharedfiles/filedetails/?id=2313802230 \
 https://github.com/NotMyWing/GarrysModAmongUs/blob/master/LICENSE_ART
 
-White icons used in achievement notifications from game-icons.net\
-Licensed under Creative Commons: By Attribution 3.0 License\
+White icons used in achievement notifications from game-icons.net \
+Licensed under Creative Commons: By Attribution 3.0 License \
 http://creativecommons.org/licenses/by/3.0/
 
 'Fall Guys Crown' model (https://skfb.ly/6W9SB) by PatelDev\
