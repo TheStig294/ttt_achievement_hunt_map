@@ -31,6 +31,17 @@ if SERVER then
             return false
         end
 
+        -- Prevents the senate's chest from erroring when the player cap is reached
+        if player.GetCount() == game.MaxPlayers() and name == "chest_senate" then
+            ply:PrintMessage(HUD_PRINTCENTER, "Max players! Someone must disconnect!")
+
+            timer.Create("AHMaxPlayerWarning", 0.1, 1, function()
+                ply:PrintMessage(HUD_PRINTTALK, "Server's max players reached! Someone must disconnect for this chest to work!")
+            end)
+
+            return false
+        end
+
         SetGlobalBool(name .. "_opened", true)
         ply.AHOpenedChest = true
 
@@ -441,6 +452,7 @@ if SERVER then
                     tom:SetNWString("PlayerName", "Angor")
                     tom:Give("weapon_zm_sledge")
                     tom:SelectWeapon("weapon_zm_sledge")
+                    SendFullStateUpdate()
 
                     -- Forcing the Tom bot to be an old man each round
                     hook.Add("TTTSelectRoles", "AHTomForceOldMan", function(choices, prevRoles)
@@ -491,8 +503,8 @@ if SERVER then
 
                             if not tom.GotShotgun then
                                 tom:StripWeapons()
-                                tom:Give("weapon_ttt_shotgun")
-                                tom:SelectWeapon("weapon_ttt_shotgun")
+                                tom:Give("weapon_zm_shotgun")
+                                tom:SelectWeapon("weapon_zm_shotgun")
                                 tom:EmitSound("ttt_achievement_hunt/tom/shotgun1.mp3")
                                 tom.GotShotgun = true
                             end
