@@ -56,7 +56,17 @@ if SERVER then
     local function CheckForCrown()
         if not GetGlobalBool("ttt_achievement_hunt_crown") then return end
 
+        -- Check if the player is alive, if not remove the crown
         for _, ply in ipairs(player.GetAll()) do
+            if ply:IsSpec() or not ply:Alive() then
+                if IsValid(ply.hat) then
+                    ply.hat:Remove()
+                    ply.hat = nil
+                end
+
+                continue
+            end
+
             if AHCrownPlayers[ply:SteamID()] then
                 AHGiveHat(ply, "models/ttt_achievement_hunt/crown.mdl")
             end
