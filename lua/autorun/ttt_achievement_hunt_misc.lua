@@ -1,5 +1,6 @@
 if SERVER then
     resource.AddWorkshop("2857904452")
+    resource.AddFile("materials/ttt_achievement_hunt/custom_textures/star_wars.vmt")
 end
 
 if not ((game.GetMap() == "ttt_achievement_hunt" or game.GetMap() == "ttt_achievement_hunt_final") and engine.ActiveGamemode() == "terrortown") then return end
@@ -11,6 +12,7 @@ local runOnceRain = true
 local playedStillAlive = false
 local randomatBlocked = false
 local runOnceRandomatMsg = true
+local roundCount = 0
 
 if SERVER then
     util.AddNetworkString("AHDrawAmongUsHalo")
@@ -272,6 +274,7 @@ hook.Add("TTTEndRound", "AHEndRound", function()
 end)
 
 hook.Add("TTTPrepareRound", "AHPrepareRound", function()
+    roundCount = roundCount + 1
     -- Resetting the redownload all lightmaps flag on the server
     runOnceNight = true
     runOnceRain = true
@@ -284,6 +287,15 @@ hook.Add("TTTPrepareRound", "AHPrepareRound", function()
 
     if SERVER then
         engine.LightStyle(0, "m")
+
+        -- Prevent night from happening on the first round as the skybox becomes lit incorrectly (still full-bright even though it is night)
+        if roundCount >= 2 then
+            timer.Simple(0.1, function()
+                for _, ent in ipairs(ents.FindByName("case_day_night")) do
+                    ent:Fire("PickRandom")
+                end
+            end)
+        end
 
         timer.Simple(1, function()
             BroadcastLua("render.RedownloadAllLightmaps(true, true)")
