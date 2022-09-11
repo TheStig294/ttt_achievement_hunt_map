@@ -440,7 +440,7 @@ if SERVER then
                 timer.Simple(2, function()
                     -- Get the last bot, which will be the one we just spawned
                     local tom = player.GetBots()[#player.GetBots()]
-                    tom:Spawn()
+                    tom:SpawnForRound(true)
 
                     if util.IsValidModel("models/player/emperor_palpatine.mdl") then
                         tom:SetModel("models/player/emperor_palpatine.mdl")
