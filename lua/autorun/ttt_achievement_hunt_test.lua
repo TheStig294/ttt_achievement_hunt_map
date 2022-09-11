@@ -62,11 +62,11 @@ if SERVER then
 
     -- These are the props Lewis mistook members of the yogscast for while playing TTT
     local yogsProps = {
-        ["models/Luria/Night_in_the_Woods/Playermodels/Mae.mdl"] = {
+        ["models/luria/night_in_the_woods/playermodels/mae.mdl"] = {
             ["prop"] = "models/props_junk/TrafficCone001a.mdl",
             ["printname"] = "a traffic cone!"
         },
-        ["models/Luria/Night_in_the_Woods/Playermodels/Mae_Astral.mdl"] = {
+        ["models/luria/night_in_the_woods/playermodels/mae_astral.mdl"] = {
             ["prop"] = "models/props_junk/TrafficCone001a.mdl",
             ["printname"] = "a traffic cone!"
         },
