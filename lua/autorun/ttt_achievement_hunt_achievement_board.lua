@@ -395,6 +395,12 @@ if CLIENT then
 
         -- Make the achievement popup slide on the screen
         timer.Create("AHAchievementAnimate", 0.02, 50, function()
+            if not IsValid(panel) then
+                timer.Remove("AHAchievementAnimate")
+
+                return
+            end
+
             xOffset = xOffset - 9.6
             panel:SetPos(xOffset, yOffset)
         end)
@@ -424,6 +430,12 @@ if CLIENT then
         -- Make the achievement popup slide off the screen and be removed
         timer.Simple(5, function()
             timer.Create("AHAchievementAnimateClose", 0.02, 50, function()
+                if not IsValid(panel) then
+                    timer.Remove("AHAchievementAnimateClose")
+
+                    return
+                end
+
                 xOffset = xOffset + 9.6
                 panel:SetPos(xOffset, yOffset)
             end)

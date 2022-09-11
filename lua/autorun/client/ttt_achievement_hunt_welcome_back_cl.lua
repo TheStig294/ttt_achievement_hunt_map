@@ -46,6 +46,13 @@ net.Receive("WelcomeBackAHPopup", function()
         local currentYSize = ySize + repetitions
         posX = (ScrW() - currentXSize) / 2
         posY = (ScrH() - currentYSize) / 2
+
+        if not IsValid(introPopup) then
+            timer.Remove("WelcomeBackAHIntroPopupTimer")
+
+            return
+        end
+
         introPopup:SetPos(posX, posY)
         introPopup:SetSize(currentXSize + repetitions, currentYSize + repetitions)
         image:SetSize(currentXSize + repetitions, currentYSize + repetitions)
