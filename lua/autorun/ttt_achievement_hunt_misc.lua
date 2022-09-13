@@ -17,6 +17,8 @@ local roundCount = 0
 if SERVER then
     util.AddNetworkString("AHDrawAmongUsHalo")
     util.AddNetworkString("AHThunderSound")
+    util.AddNetworkString("AHStartRainProp")
+    util.AddNetworkString("AHEndRainProp")
     SetGlobalBool("AHWelcomeBackButtonPressed", false)
 
     CreateConVar("ttt_achievement_hunt_block_randomat", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Whether the ordinary randomat (not the make-a-randomat feature) should be disabled on ttt_achievement_hunt", 0, 1)
@@ -46,7 +48,7 @@ if SERVER then
         if GetGlobalBool("AHNight", false) and runOnceNight then
             engine.LightStyle(0, "b")
 
-            timer.Simple(1, function()
+            timer.Simple(3, function()
                 BroadcastLua("render.RedownloadAllLightmaps(true, true)")
             end)
 
@@ -55,7 +57,7 @@ if SERVER then
         elseif GetGlobalBool("AHNight", false) == false and not runOnceNight then
             engine.LightStyle(0, "m")
 
-            timer.Simple(1, function()
+            timer.Simple(3, function()
                 BroadcastLua("render.RedownloadAllLightmaps(true, true)")
             end)
 
@@ -63,7 +65,11 @@ if SERVER then
         end
 
         -- Playing a thunder sound while raining intermittently
+        -- Create client-side rain props that follow players
         if GetGlobalBool("AHRain", false) and runOnceRain then
+            net.Start("AHStartRainProp")
+            net.Broadcast()
+
             timer.Create("AHThunderSoundLoop", 30, 0, function()
                 local snd = "ttt_achievement_hunt/minecraft_sounds/thunder" .. math.random(1, 3) .. ".mp3"
                 net.Start("AHThunderSound")
@@ -73,6 +79,23 @@ if SERVER then
 
             AHEarnAchievement("environment")
             runOnceRain = false
+        end
+    end)
+
+    -- Creates rain props on top of players, only visible to them, on players outside during rain
+    hook.Add("AcceptInput", "AHHandleRainProps", function(ent, name, activator, caller, data)
+        if not GetGlobalBool("AHRain") or not IsPlayer(activator) then return end
+
+        if ent:GetClass() == "trigger_multiple" and ent:GetName() == "trigger_inside" then
+            if name == "FireUser2" then
+                net.Start("AHStartRainProp")
+                net.Send(activator)
+            end
+
+            if name == "FireUser1" then
+                net.Start("AHEndRainProp")
+                net.Send(activator)
+            end
         end
     end)
 
@@ -201,6 +224,8 @@ if CLIENT then
 
     -- Playing a looping rain and thunder sound when it is raining
     hook.Add("Think", "AchievementHuntRainCheck", function()
+        local ply = LocalPlayer()
+
         if GetGlobalBool("AHRain", false) and runOnceRain then
             runOnceRain = false
 
@@ -221,6 +246,10 @@ if CLIENT then
                     surface.PlaySound("ttt_achievement_hunt/custom_sounds/night.mp3")
                 end
             end)
+        end
+
+        if IsValid(ply.AHRainProp) then
+            ply.AHRainProp:SetPos(ply:GetPos())
         end
 
         -- Playing nighttime ambience at night
@@ -261,6 +290,29 @@ if CLIENT then
         local snd = net.ReadString()
         surface.PlaySound(snd)
     end)
+
+    net.Receive("AHStartRainProp", function()
+        local ply = LocalPlayer()
+
+        if not ply.AHRainProp then
+            local prop = ents.CreateClientProp()
+            prop:SetModel("models/ttt_achievement_hunt/mcmodelpack/entities/weather.mdl")
+            prop:Spawn()
+            ply.AHRainProp = prop
+        end
+    end)
+
+    net.Receive("AHEndRainProp", function()
+        local ply = LocalPlayer()
+
+        if ply.AHRainProp then
+            if IsValid(ply.AHRainProp) then
+                ply.AHRainProp:Remove()
+            end
+
+            ply.AHRainProp = nil
+        end
+    end)
 end
 
 hook.Add("TTTEndRound", "AHEndRound", function()
@@ -287,6 +339,8 @@ hook.Add("TTTPrepareRound", "AHPrepareRound", function()
 
     if SERVER then
         engine.LightStyle(0, "m")
+        net.Start("AHEndRainProp")
+        net.Broadcast()
 
         -- Prevent night from happening on the first round as the skybox becomes lit incorrectly (still full-bright even though it is night)
         if roundCount >= 2 then
