@@ -56,9 +56,9 @@ if SERVER then
     local function CheckForCrown()
         if not GetGlobalBool("ttt_achievement_hunt_crown") then return end
 
-        -- Check if the player is alive, if not remove the crown
+        -- Check if the player is dead, invisible, or disguised. If so remove the crown
         for _, ply in ipairs(player.GetAll()) do
-            if ply:IsSpec() or not ply:Alive() then
+            if ply:IsSpec() or not ply:Alive() or ply:GetRenderMode() ~= RENDERMODE_NORMAL or ply:GetNoDraw() or ply:GetNWBool("disguised", false) or ply:GetMaterial() == "sprites/heatwave" then
                 if IsValid(ply.hat) then
                     ply.hat:Remove()
                     ply.hat = nil
