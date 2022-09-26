@@ -119,6 +119,8 @@ net.Receive("WelcomeBackAHCreateOverlay", function()
         alpha = alpha + 0.01
     end)
 
+    local ROLE_GLITCH = ROLE_GLITCH or -1
+
     hook.Add("DrawOverlay", "WelcomeBackAHDrawNameOverlay", function()
         surface.SetAlphaMultiplier(alpha)
 
@@ -135,7 +137,7 @@ net.Receive("WelcomeBackAHCreateOverlay", function()
                     iconRole = ply:GetRole()
                 end
                 -- Reveal fellow traitors as plain traitors until they're searched, when there is a glitch
-            elseif LocalPlayer():GetNWBool("WelcomeBackAHTraitor") and ply:GetNWBool("WelcomeBackAHTraitor") then
+            elseif LocalPlayer():GetNWBool("WelcomeBackAHTraitor") and ply:GetNWBool("WelcomeBackAHTraitor") and LocalPlayer():GetRole() ~= ROLE_GLITCH then
                 if GetGlobalBool("WelcomeBackAHGlitchExists") then
                     roleColour = ROLE_COLORS[ROLE_TRAITOR]
 
@@ -156,7 +158,7 @@ net.Receive("WelcomeBackAHCreateOverlay", function()
                 if roleIcons then
                     iconRole = ROLE_DETECTIVE
                 end
-            elseif LocalPlayer():GetNWBool("WelcomeBackAHTraitor") and ply:GetNWBool("WelcomeBackAHJester") then
+            elseif LocalPlayer():GetNWBool("WelcomeBackAHTraitor") and ply:GetNWBool("WelcomeBackAHJester") and LocalPlayer():GetRole() ~= ROLE_GLITCH then
                 -- Reveal jesters only to traitors
                 roleColour = ROLE_COLORS[ply:GetRole()]
 
