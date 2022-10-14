@@ -347,6 +347,8 @@ hook.Add("TTTPrepareRound", "AHPrepareRound", function()
         engine.LightStyle(0, "m")
         net.Start("AHEndRainProp")
         net.Broadcast()
+        net.Start("AHEndNight")
+        net.Broadcast()
 
         -- Prevent night from happening on the first round as the skybox becomes lit incorrectly (still full-bright even though it is night)
         if roundCount >= 2 then
