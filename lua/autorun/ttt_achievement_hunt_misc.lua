@@ -19,6 +19,8 @@ if SERVER then
     util.AddNetworkString("AHThunderSound")
     util.AddNetworkString("AHStartRainProp")
     util.AddNetworkString("AHEndRainProp")
+    util.AddNetworkString("AHStartNight")
+    util.AddNetworkString("AHEndNight")
     SetGlobalBool("AHWelcomeBackButtonPressed", false)
 
     CreateConVar("ttt_achievement_hunt_block_randomat", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Whether the ordinary randomat (not the make-a-randomat feature) should be disabled on ttt_achievement_hunt", 0, 1)
@@ -48,8 +50,9 @@ if SERVER then
         if GetGlobalBool("AHNight", false) and runOnceNight then
             engine.LightStyle(0, "b")
 
-            timer.Simple(3, function()
-                BroadcastLua("render.RedownloadAllLightmaps(true, true)")
+            timer.Simple(1, function()
+                net.Start("AHStartNight")
+                net.Broadcast()
             end)
 
             AHEarnAchievement("environment")
@@ -57,8 +60,9 @@ if SERVER then
         elseif GetGlobalBool("AHNight", false) == false and not runOnceNight then
             engine.LightStyle(0, "m")
 
-            timer.Simple(3, function()
-                BroadcastLua("render.RedownloadAllLightmaps(true, true)")
+            timer.Simple(1, function()
+                net.Start("AHEndNight")
+                net.Broadcast()
             end)
 
             runOnceNight = true
@@ -210,16 +214,50 @@ if CLIENT then
         end)
     end)
 
-    -- Changes the skybox fog colour when nighttime is on
-    hook.Add("SetupSkyboxFog", "AHFogToggle", function(scale)
-        if GetGlobalBool("AHNight", false) then
+    -- Activates night-time client-side effects, like fog and looped background crickets sound
+    net.Receive("AHStartNight", function()
+        render.RedownloadAllLightmaps(true, true)
+
+        -- Changes the skybox fog colour when nighttime is on
+        hook.Add("SetupSkyboxFog", "AHFogToggle", function(scale)
             render.FogColor(0, 0, 0)
             render.FogStart(1000 * scale)
             render.FogEnd(2000 * scale)
             render.FogMode(MATERIAL_FOG_LINEAR)
 
             return true
-        end
+        end)
+
+        timer.Simple(1, function()
+            -- Preventing the night time sound from playing while it is raining
+            if not GetGlobalBool("AHRain", false) then
+                surface.PlaySound("ttt_achievement_hunt/custom_sounds/night.mp3")
+            end
+        end)
+
+        -- Playing nighttime ambience at night
+        timer.Create("AHNightSoundLoop", 20, 0, function()
+            if GetGlobalBool("AHRain", false) then
+                timer.Remove("AHNightSoundLoop")
+
+                return
+            end
+
+            surface.PlaySound("ttt_achievement_hunt/custom_sounds/night.mp3")
+        end)
+    end)
+
+    net.Receive("AHEndNight", function()
+        render.RedownloadAllLightmaps(true, true)
+        hook.Remove("SetupSkyboxFog", "AHFogToggle")
+        timer.Remove("AHNightSoundLoop")
+        RunConsoleCommand("stopsound")
+
+        timer.Simple(2, function()
+            if GetGlobalBool("AHRain", false) then
+                surface.PlaySound("ttt_achievement_hunt/minecraft_sounds/rain.mp3")
+            end
+        end)
     end)
 
     -- Playing a looping rain and thunder sound when it is raining
@@ -229,7 +267,7 @@ if CLIENT then
         if GetGlobalBool("AHRain", false) and runOnceRain then
             runOnceRain = false
 
-            timer.Simple(1, function(arguments)
+            timer.Simple(1, function()
                 surface.PlaySound("ttt_achievement_hunt/minecraft_sounds/rain.mp3")
             end)
 
@@ -250,38 +288,6 @@ if CLIENT then
 
         if IsValid(ply.AHRainProp) then
             ply.AHRainProp:SetPos(ply:GetPos())
-        end
-
-        -- Playing nighttime ambience at night
-        if GetGlobalBool("AHNight", false) and runOnceNight then
-            runOnceNight = false
-
-            timer.Simple(1, function(arguments)
-                -- Preventing the night time sound from playing while it is raining
-                if not GetGlobalBool("AHRain", false) then
-                    surface.PlaySound("ttt_achievement_hunt/custom_sounds/night.mp3")
-                end
-            end)
-
-            timer.Create("AHNightSoundLoop", 20, 0, function()
-                if GetGlobalBool("AHRain", false) then
-                    timer.Remove("AHNightSoundLoop")
-
-                    return
-                end
-
-                surface.PlaySound("ttt_achievement_hunt/custom_sounds/night.mp3")
-            end)
-        elseif GetGlobalBool("AHNight", false) == false and not runOnceNight then
-            runOnceNight = true
-            timer.Remove("AHNightSoundLoop")
-            RunConsoleCommand("stopsound")
-
-            timer.Simple(2, function()
-                if GetGlobalBool("AHRain", false) then
-                    surface.PlaySound("ttt_achievement_hunt/minecraft_sounds/rain.mp3")
-                end
-            end)
         end
     end)
 
@@ -352,8 +358,6 @@ hook.Add("TTTPrepareRound", "AHPrepareRound", function()
         end
 
         timer.Simple(1, function()
-            BroadcastLua("render.RedownloadAllLightmaps(true, true)")
-
             -- Finding the welcome back button and locking it if the randomat it triggers does not exist, or it has already been pressed before
             if GetGlobalBool("AHWelcomeBackButtonPressed", false) or not (Randomat and Randomat.CanEventRun and Randomat:CanEventRun("welcomeback")) then
                 for _, ent in ipairs(ents.FindByName("welcome_back_button")) do
