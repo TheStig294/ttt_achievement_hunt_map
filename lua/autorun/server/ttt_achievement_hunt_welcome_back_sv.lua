@@ -65,14 +65,13 @@ local function IsGoodDetectiveLike(ply)
     return role == ROLE_DETECTIVE or (IsDetectiveLike(ply) and IsInnocentTeam(ply))
 end
 
-util.AddNetworkString("WelcomeBackAHPopup")
-util.AddNetworkString("WelcomeBackAHCreateOverlay")
-util.AddNetworkString("WelcomeBackAHEnd")
+util.AddNetworkString("WelcomeBackPopup")
+util.AddNetworkString("WelcomeBackEnd")
 
 local function Begin()
     -- Puts the intro popup on the screen for all players
     local randomIntroSound = "ttt_achievement_hunt/custom_sounds/intro" .. math.random(1, 3) .. ".mp3"
-    net.Start("WelcomeBackAHPopup")
+    net.Start("WelcomeBackPopup")
     net.WriteString(randomIntroSound)
     net.Broadcast()
 
@@ -81,84 +80,91 @@ local function Begin()
         SetGlobalInt("ttt_lootgoblin_notify_mode", GetConVar("ttt_lootgoblin_notify_mode"):GetInt())
     end
 
-    -- Sets flags on players using randomat functions only available on the server
-    for _, ply in ipairs(GetAlivePlayers()) do
-        if IsGoodDetectiveLike(ply) then
-            ply:SetNWBool("WelcomeBackAHIsGoodDetectiveLike", true)
-            ply:SetNWBool("WelcomeBackAHIsDetectiveLike", true)
-        elseif IsEvilDetectiveLike(ply) then
-            ply:SetNWBool("WelcomeBackAHTraitor", true)
-            ply:SetNWBool("WelcomeBackAHIsDetectiveLike", true)
-        elseif IsDetectiveLike(ply) then
-            ply:SetNWBool("WelcomeBackAHIsDetectiveLike", true)
-        elseif IsJesterTeam(ply) then
-            ply:SetNWBool("WelcomeBackAHJester", true)
-        elseif IsTraitorTeam(ply) or ply.IsGlitch and ply:IsGlitch() then
-            ply:SetNWBool("WelcomeBackAHTraitor", true)
+    -- Continually checks for players' roles, in case roles change
+    timer.Create("WelcomeBackRandomatCheckRoleChange", 1, 0, function()
+        for _, ply in ipairs(GetAlivePlayers()) do
+            ply:SetNWBool("WelcomeBackIsDetectiveLike", false)
+            ply:SetNWBool("WelcomeBackIsGoodDetectiveLike", false)
+            ply:SetNWBool("WelcomeBackJester", false)
+            ply:SetNWBool("WelcomeBackTraitor", false)
         end
 
-        if ply.IsGlitch and ply:IsGlitch() then
-            SetGlobalBool("WelcomeBackAHGlitchExists", true)
+        for _, ply in ipairs(GetAlivePlayers()) do
+            if IsGoodDetectiveLike(ply) then
+                ply:SetNWBool("WelcomeBackIsGoodDetectiveLike", true)
+                ply:SetNWBool("WelcomeBackIsDetectiveLike", true)
+            elseif IsEvilDetectiveLike(ply) then
+                ply:SetNWBool("WelcomeBackTraitor", true)
+                ply:SetNWBool("WelcomeBackIsDetectiveLike", true)
+            elseif IsDetectiveLike(ply) then
+                ply:SetNWBool("WelcomeBackIsDetectiveLike", true)
+            elseif IsJesterTeam(ply) then
+                ply:SetNWBool("WelcomeBackJester", true)
+            elseif IsTraitorTeam(ply) or ply.IsGlitch and ply:IsGlitch() then
+                ply:SetNWBool("WelcomeBackTraitor", true)
+            end
+
+            if ply.IsGlitch and ply:IsGlitch() then
+                SetGlobalBool("WelcomeBackGlitchExists", true)
+            end
         end
-    end
+    end)
 
     -- Reveals the role of a player when a corpse is searched
-    hook.Add("TTTBodyFound", "WelcomeBackAHCorpseSearch", function(_, deadply, rag)
+    hook.Add("TTTBodyFound", "WelcomeBackCorpseSearch", function(_, deadply, rag)
         -- If the dead player has disconnected, they won't be on the scoreboard, so skip them
         if not IsPlayer(deadply) then return end
         -- Get the role of the dead player from the ragdoll itself so artificially created ragdolls like the dead ringer aren't given away
-        deadply:SetNWBool("WelcomeBackAHBodyFound", true)
+        deadply:SetNWBool("WelcomeBackCrossName", true)
     end)
 
     -- Reveals the role of a player when a corpse is searched
-    hook.Add("TTTCanIdentifyCorpse", "WelcomeBackAHCorpseSearch", function(_, ragdoll)
+    hook.Add("TTTCanIdentifyCorpse", "WelcomeBackCorpseSearch", function(_, ragdoll)
         local ply = CORPSE.GetPlayer(ragdoll)
         -- If the dead player has disconnected, they won't be on the scoreboard, so skip them
         if not IsPlayer(ply) then return end
-        ply:SetNWInt("WelcomeBackAHScoreboardRoleRevealed", ragdoll.was_role)
+        ply:SetNWInt("WelcomeBackScoreboardRoleRevealed", ragdoll.was_role)
     end)
 
     -- Reveals the loot goblin's death to everyone if it is announced
-    hook.Add("PostPlayerDeath", "WelcomeBackAHDeath", function(ply)
+    hook.Add("PostPlayerDeath", "WelcomeBackDeath", function(ply)
         if ply.IsLootGoblin and ply:IsLootGoblin() and ply:IsRoleActive() and GetGlobalInt("ttt_lootgoblin_notify_mode") == 4 then
-            ply:SetNWBool("WelcomeBackAHBodyFound", true)
-            ply:SetNWInt("WelcomeBackAHScoreboardRoleRevealed", ply:GetRole())
+            ply:SetNWBool("WelcomeBackCrossName", true)
+            ply:SetNWInt("WelcomeBackScoreboardRoleRevealed", ply:GetRole())
         end
     end)
 
     -- Starts fading in the role overlay and displays the event's name without making the randomat alert sound
     timer.Create("WelcomeBackAHDrawOverlay", 3.031, 1, function()
-        net.Start("WelcomeBackAHCreateOverlay")
+        net.Start("AHRandomatAlertSilent")
+        net.WriteBool(true)
+        net.WriteString("Welcome back to TTT!")
+        net.WriteUInt(5, 8)
         net.Broadcast()
-
-        timer.Simple(0.1, function()
-            net.Start("AHRandomatAlertSilent")
-            net.WriteBool(true)
-            net.WriteString("Welcome back to TTT!")
-            net.WriteUInt(5, 8)
-            net.Broadcast()
-        end)
     end)
 end
 
 local function End()
     -- Removes all popups on the screen
-    hook.Remove("TTTCanIdentifyCorpse", "WelcomeBackAHSearch")
-    timer.Remove("WelcomeBackAHDrawOverlay")
-    net.Start("WelcomeBackAHEnd")
+    timer.Remove("WelcomeBackRandomatDrawOverlay")
+    timer.Remove("WelcomeBackRandomatCheckRoleChange")
+    hook.Remove("TTTBodyFound", "WelcomeBackCorpseSearch")
+    hook.Remove("TTTCanIdentifyCorpse", "WelcomeBackCorpseSearch")
+    hook.Remove("PostPlayerDeath", "WelcomeBackDeath")
+    net.Start("WelcomeBackEnd")
     net.Broadcast()
 
     -- Removes all flags set
     for _, ply in ipairs(player.GetAll()) do
-        ply:SetNWBool("WelcomeBackAHIsDetectiveLike", false)
-        ply:SetNWBool("WelcomeBackAHIsGoodDetectiveLike", false)
-        ply:SetNWBool("WelcomeBackAHJester", false)
-        ply:SetNWBool("WelcomeBackAHTraitor", false)
-        ply:SetNWInt("WelcomeBackAHScoreboardRoleRevealed", -1)
-        ply:SetNWBool("WelcomeBackAHBodyFound", false)
+        ply:SetNWBool("WelcomeBackIsDetectiveLike", false)
+        ply:SetNWBool("WelcomeBackIsGoodDetectiveLike", false)
+        ply:SetNWBool("WelcomeBackJester", false)
+        ply:SetNWBool("WelcomeBackTraitor", false)
+        ply:SetNWInt("WelcomeBackScoreboardRoleRevealed", -1)
+        ply:SetNWBool("WelcomeBackCrossName", false)
     end
 
-    SetGlobalBool("WelcomeBackAHGlitchExists", false)
+    SetGlobalBool("WelcomeBackGlitchExists", false)
 end
 
 local buttonPressed = false
@@ -185,12 +191,25 @@ hook.Add("PlayerUse", "WelcomeBackAHButton", function(ply, ent)
 
         buttonPressed = true
         AHEarnAchievement("welcomeback")
-        Begin()
 
-        hook.Add("TTTEndRound", "WelcomeBackAHCleanup", function()
-            End()
-            hook.Remove("TTTEndRound", "WelcomeBackAHCleanup")
-        end)
+        if STIG_ROLE_OVERLAY_MOD_INSTALLED then
+            ply:PrintMessage(HUD_PRINTCENTER, "You have a role overlay mod installed that already does what this button does!")
+
+            timer.Simple(2, function()
+                ply:PrintMessage(HUD_PRINTCENTER, "You have a role overlay mod installed that already does what this button does!")
+            end)
+
+            timer.Simple(4, function()
+                ply:PrintMessage(HUD_PRINTCENTER, "You have a role overlay mod installed that already does what this button does!")
+            end)
+        else
+            Begin()
+
+            hook.Add("TTTEndRound", "WelcomeBackAHCleanup", function()
+                End()
+                hook.Remove("TTTEndRound", "WelcomeBackAHCleanup")
+            end)
+        end
     end)
 end)
 
