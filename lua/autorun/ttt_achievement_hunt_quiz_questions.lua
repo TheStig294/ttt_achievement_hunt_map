@@ -514,15 +514,15 @@ AHQuizQuestions.randomats = {
     ["CorrectAnswer"] = "c"
 }
 
-AHQuizQuestions.loss = {
+AHQuizQuestions.ligma = {
     ["Asked"] = false,
-    ["ID"] = "loss",
-    ["QuestionText"] = "Is this loss?",
+    ["ID"] = "ligma",
+    ["QuestionText"] = "What's Ligma?",
     ["AnswerText"] = {
-        ["a"] = "|",
-        ["b"] = "||",
-        ["c"] = "||",
-        ["d"] = "|_"
+        ["a"] = "A disease",
+        ["b"] = "Nonsense",
+        ["c"] = "A joke",
+        ["d"] = "Ligma balls"
     },
     ["CorrectAnswer"] = "d"
 }
