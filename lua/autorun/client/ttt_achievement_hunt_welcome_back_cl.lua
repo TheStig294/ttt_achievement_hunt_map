@@ -6,11 +6,16 @@ local YPos = 50
 local alpha = 0
 local iconSize = 40
 local playerNames = {}
-local minBoxWidth = 150
+local minBoxWidth = 180
 local boxOutlineSize = 2
 local boxPadding = 10
 local boxBorderSize = 28
 local boxWidths = {}
+local largeScreen = ScrW() >= 1920
+
+if not largeScreen then
+    minBoxWidth = 150
+end
 
 surface.CreateFont("WelcomeBackRandomatOverlayFont", {
     font = "Trebuchet24",
@@ -19,35 +24,73 @@ surface.CreateFont("WelcomeBackRandomatOverlayFont", {
     shadow = true
 })
 
-local function WordBox(bordersize, x, y, text, font, color, fontcolor, xalign, yalign)
+local function WordBox(bordersize, x, y, text, font, color, fontcolor, xalign, yalign, ply, roleIcons, iconRole)
     surface.SetFont(font)
-    local w, h = surface.GetTextSize(text)
+    local textWidth, textHeight = surface.GetTextSize(text)
+    local XPos = x
 
     if (xalign == TEXT_ALIGN_CENTER) then
-        x = x - (bordersize + w / 2)
+        x = x - (bordersize + textWidth / 2)
     elseif (xalign == TEXT_ALIGN_RIGHT) then
-        x = x - (bordersize * 2 + w)
+        x = x - (bordersize * 2 + textWidth)
     end
 
     if (yalign == TEXT_ALIGN_CENTER) then
-        y = y - (bordersize + h / 2)
+        y = y - (bordersize + textHeight / 2)
     elseif (yalign == TEXT_ALIGN_BOTTOM) then
-        y = y - (bordersize * 2 + h)
+        y = y - (bordersize * 2 + textHeight)
     end
 
-    local boxWidth = w + bordersize * 2
+    local boxHeight = textHeight + bordersize
+    local boxWidth = textWidth + bordersize * 2
+
+    -- Make the boxes wider to fit the icons on the side if the screen is large
+    if largeScreen then
+        boxWidth = boxWidth + iconSize
+    end
+
     boxWidth = math.max(minBoxWidth, boxWidth)
-    local xDiff = boxWidth - (w + bordersize * 2)
+    local xDiff = boxWidth - (textWidth + bordersize * 2)
     -- Box outline
-    draw.RoundedBox(bordersize, x - xDiff / 2 - boxOutlineSize, y + bordersize / 1.3 - boxOutlineSize, boxWidth + boxOutlineSize * 2, h + bordersize / 2 + boxOutlineSize * 2, COLOR_WHITE)
+    draw.RoundedBox(bordersize, x - xDiff / 2 - boxOutlineSize, y + bordersize / 1.3 - boxOutlineSize, boxWidth + boxOutlineSize * 2, textHeight + bordersize / 2 + boxOutlineSize * 2, COLOR_WHITE)
     -- Box background
-    draw.RoundedBox(bordersize, x - xDiff / 2, y + bordersize / 1.3, boxWidth, h + bordersize / 2, color)
+    draw.RoundedBox(bordersize, x - xDiff / 2, y + bordersize / 1.3, boxWidth, textHeight + bordersize / 2, color)
+
+    -- Death X
+    if ply:GetNWBool("WelcomeBackCrossName") then
+        surface.SetFont("WelcomeBackRandomatOverlayFont")
+        -- And they said you'd never use this from maths class...
+        local angle = math.deg(math.atan2(boxHeight, boxWidth))
+        draw.NoTexture()
+        surface.SetDrawColor(255, 255, 255)
+        surface.DrawTexturedRectRotated(XPos, YPos, boxWidth * 0.6 + 1, 6, angle)
+        surface.DrawTexturedRectRotated(XPos, YPos, boxWidth * 0.6 + 1, 6, -angle)
+        surface.SetDrawColor(255, 0, 0)
+        surface.DrawTexturedRectRotated(XPos, YPos, boxWidth * 0.6, 5, angle)
+        surface.DrawTexturedRectRotated(XPos, YPos, boxWidth * 0.6, 5, -angle)
+    end
+
+    -- Role icons
+    if iconRole then
+        surface.SetMaterial(roleIcons[iconRole])
+        surface.SetDrawColor(255, 255, 255, 200)
+
+        -- Draw the icons in the middle of each box if the screen size doesn't permit drawing them to the side of each name
+        if largeScreen then
+            surface.DrawTexturedRect(XPos - boxWidth / 2 + iconSize / 4, YPos - iconSize / 2, iconSize, iconSize)
+        else
+            surface.DrawTexturedRect(XPos - iconSize / 2, iconSize / 6, iconSize, iconSize)
+        end
+    end
+
     -- Box text
     surface.SetTextColor(fontcolor.r, fontcolor.g, fontcolor.b, fontcolor.a)
     surface.SetTextPos(x + bordersize, y + bordersize)
     surface.DrawText(text)
 
-    return boxWidth
+    if not boxWidths[ply] then
+        boxWidths[ply] = boxWidth
+    end
 end
 
 local function OverrideColours()
@@ -68,9 +111,28 @@ local function OverrideColours()
     return colourTable
 end
 
+local function CalculateBoxWidths()
+    local screenWidth = ScrW()
+    local overlayWidth = 0
+
+    for _, ply in ipairs(player.GetAll()) do
+        if ply:IsSpec() then continue end
+        overlayWidth = overlayWidth + boxPadding + boxWidths[ply]
+    end
+
+    local leftMargin = screenWidth / 2 - overlayWidth / 2
+    local boxOffset = 0
+
+    for _, ply in ipairs(player.GetAll()) do
+        if ply:IsSpec() then continue end
+        boxOffset = boxOffset + boxWidths[ply] / 2
+        overlayPositions[ply] = leftMargin + boxOffset
+        boxOffset = boxOffset + boxPadding + boxWidths[ply] / 2
+    end
+end
+
 local function CreateOverlay()
     local playerCount = 0
-    local screenWidth = ScrW()
 
     -- Grabbing player names and the number of them
     for i, ply in ipairs(player.GetAll()) do
@@ -82,12 +144,14 @@ local function CreateOverlay()
     for _, ply in ipairs(player.GetAll()) do
         if ply:IsSpec() then
             overlayPositions[ply] = nil
-        else
+        elseif not overlayPositions[ply] then
             overlayPositions[ply] = 0
         end
     end
 
     -- Fallback colours to use if CR for TTT is not installed
+    local defaultColour = Color(100, 100, 100)
+
     local colourTable = {
         [ROLE_INNOCENT] = Color(25, 200, 25, 200),
         [ROLE_TRAITOR] = Color(200, 25, 25, 200),
@@ -125,7 +189,6 @@ local function CreateOverlay()
         end
     end
 
-    local defaultColour = Color(100, 100, 100)
     alpha = 0
 
     timer.Create("WelcomeBackStartFade", 3.031, 1, function()
@@ -134,25 +197,14 @@ local function CreateOverlay()
         end)
     end)
 
-    boxWidths = {}
+    local boxWidthsCalculated = false
 
-    timer.Simple(1, function()
-        local overlayWidth = 0
+    timer.Simple(0.1, function()
+        CalculateBoxWidths()
 
-        for _, ply in ipairs(player.GetAll()) do
-            if ply:IsSpec() then continue end
-            overlayWidth = overlayWidth + boxPadding + boxWidths[ply]
-        end
-
-        local leftMargin = screenWidth / 2 - overlayWidth / 2
-        local boxOffset = 0
-
-        for _, ply in ipairs(player.GetAll()) do
-            if ply:IsSpec() then continue end
-            boxOffset = boxOffset + boxWidths[ply] / 2
-            overlayPositions[ply] = leftMargin + boxOffset
-            boxOffset = boxOffset + boxPadding + boxWidths[ply] / 2
-        end
+        timer.Simple(1, function()
+            boxWidthsCalculated = true
+        end)
     end)
 
     hook.Add("DrawOverlay", "WelcomeBackRandomatDrawNameOverlay", function()
@@ -161,10 +213,21 @@ local function CreateOverlay()
         for ply, XPos in SortedPairsByValue(overlayPositions) do
             if not IsValid(ply) then continue end
             local roleColour = defaultColour
-            local iconRole
+            local iconRole = nil
 
-            -- Reveal yourself, searched players, detectives (when their roles aren't hidden) to everyone, loot goblins (when they are shown to everyone), revealed turncoats and revealed beggars
-            if ply == LocalPlayer() or ply:GetNWInt("WelcomeBackScoreboardRoleRevealed", -1) ~= -1 or ply:GetNWBool("WelcomeBackIsGoodDetectiveLike") or (ply.IsLootGoblin and ply:IsLootGoblin() and ply:IsRoleActive() and GetGlobalInt("ttt_lootgoblin_announce") == 4) or (ply.IsTurncoat and ply:IsTurncoat() and ply:IsTraitorTeam()) or ply.IsBeggar and ply:IsBeggar() and ply:ShouldRevealBeggar() then
+            if GetRoundState() == ROUND_PREP or not boxWidthsCalculated then
+                -- If the round hasn't started yet,
+                -- or in the split-second where the overlay is not displayed properly as box widths are being calculated,
+                -- display everyone as a grey rectangle
+                roleColour = defaultColour
+                iconRole = nil
+            elseif GetRoundState() == ROUND_POST then
+                -- At the end of the round, display everyone's role
+                local role = ply:GetRole()
+                roleColour = colourTable[role]
+                iconRole = role
+            elseif ply == LocalPlayer() or ply:GetNWInt("WelcomeBackScoreboardRoleRevealed", -1) ~= -1 or ply:GetNWBool("WelcomeBackIsGoodDetectiveLike") or (ply.IsLootGoblin and ply:IsLootGoblin() and ply:IsRoleActive() and GetGlobalInt("ttt_lootgoblin_announce") == 4) or (ply.IsTurncoat and ply:IsTurncoat() and ply:IsTraitorTeam()) or ply.IsBeggar and ply:IsBeggar() and ply:ShouldRevealBeggar() then
+                -- Reveal yourself, searched players, detectives (when their roles aren't hidden) to everyone, loot goblins (when they are shown to everyone), revealed turncoats and revealed beggars
                 local role = ply:GetRole()
 
                 if roleIcons then
@@ -183,8 +246,8 @@ local function CreateOverlay()
                 if roleIcons and role == ROLE_DETECTIVE and (GetGlobalInt("ttt_detective_hide_special_mode", 0) == 1 or (GetGlobalInt("ttt_detective_hide_special_mode", 0) == 2 and ply ~= LocalPlayer())) then
                     iconRole = ROLE_NONE
                 end
-                -- Reveal fellow traitors as plain traitors until they're searched, when there is a glitch
             elseif LocalPlayer():GetNWBool("WelcomeBackTraitor") and ply:GetNWBool("WelcomeBackTraitor") and not (LocalPlayer().IsGlitch and LocalPlayer():IsGlitch()) then
+                -- Reveal fellow traitors as plain traitors until they're searched, when there is a glitch
                 if GetGlobalBool("WelcomeBackGlitchExists") then
                     roleColour = colourTable[ROLE_TRAITOR]
 
@@ -221,33 +284,8 @@ local function CreateOverlay()
 
             -- But if the player still doesn't have a name yet, skip them
             if not playerNames[ply] then continue end
-            -- Box and player name
-            local boxWidth = WordBox(boxBorderSize, XPos, YPos, playerNames[ply], "WelcomeBackRandomatOverlayFont", roleColour, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
-            if not boxWidths[ply] then
-                boxWidths[ply] = boxWidth
-            end
-
-            -- Role icons
-            if iconRole then
-                surface.SetMaterial(roleIcons[iconRole])
-                surface.SetDrawColor(255, 255, 255)
-                surface.DrawTexturedRect(XPos - iconSize / 2, iconSize / 6, iconSize, iconSize)
-            end
-
-            -- Death X
-            if ply:GetNWBool("WelcomeBackCrossName") then
-                -- You have to set the font using surface.SetFont() to use surface.GetTextSize(), even though surface.SetFont() is not used for any drawing
-                surface.SetFont("WelcomeBackRandomatOverlayFont")
-                local textWidth, _ = surface.GetTextSize(playerNames[ply])
-                draw.NoTexture()
-                surface.SetDrawColor(255, 255, 255)
-                surface.DrawTexturedRectRotated(XPos, YPos, textWidth + 1, 6, 30)
-                surface.DrawTexturedRectRotated(XPos, YPos, textWidth + 1, 6, -30)
-                surface.SetDrawColor(255, 0, 0)
-                surface.DrawTexturedRectRotated(XPos, YPos, textWidth, 5, 30)
-                surface.DrawTexturedRectRotated(XPos, YPos, textWidth, 5, -30)
-            end
+            -- Name box drawing
+            WordBox(boxBorderSize, XPos, YPos, playerNames[ply], "WelcomeBackRandomatOverlayFont", roleColour, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ply, roleIcons, iconRole)
         end
     end)
 end
@@ -285,6 +323,7 @@ net.Receive("WelcomeBackPopup", function()
     image:SetPos(0, 0)
 
     timer.Create("WelcomeBackIntroPopupTimer", offsetLength / pixelOffset, pixelOffset * offsetLength, function()
+        if not IsValid(introPopup) then return end
         local repetitions = pixelOffset - timer.RepsLeft("WelcomeBackIntroPopupTimer")
         local currentXSize = xSize + repetitions
         local currentYSize = ySize + repetitions
@@ -297,6 +336,7 @@ net.Receive("WelcomeBackPopup", function()
     end)
 
     timer.Create("WelcomeBackCloseIntroPopup", 3.031, 1, function()
+        if not IsValid(introPopup) then return end
         introPopup:Close()
     end)
 
