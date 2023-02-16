@@ -437,7 +437,7 @@ AHQuizQuestions.whosbad = {
         SetGlobalString("AHQuizWhosBad", "Someone")
 
         for _, ply in RandomPairs(player.GetAll()) do
-            if ply.IsInnocentTeam and not ply:IsInnocentTeam() then
+            if ply.IsTraitorTeam and ply:IsTraitorTeam() then
                 SetGlobalString("AHQuizWhosBad", ply:Nick())
                 break
             elseif ply:GetRole() == ROLE_TRAITOR then
