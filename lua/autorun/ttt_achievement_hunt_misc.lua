@@ -1,6 +1,10 @@
 if SERVER then
     resource.AddWorkshop("2857904452")
     resource.AddFile("materials/ttt_achievement_hunt/custom_textures/star_wars.vmt")
+    resource.AddFile("models/ttt_achievement_hunt/crown.mdl")
+    resource.AddFile("materials/models/ttt_achievement_hunt/crown/gold1.vmt")
+    resource.AddFile("materials/models/ttt_achievement_hunt/crown/gold2.vmt")
+    resource.AddFile("materials/models/ttt_achievement_hunt/crown/gold3.vmt")
 end
 
 if not ((game.GetMap() == "ttt_achievement_hunt" or game.GetMap() == "ttt_achievement_hunt_final") and engine.ActiveGamemode() == "terrortown") then return end
