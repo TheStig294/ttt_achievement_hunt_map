@@ -46,11 +46,8 @@ local drawStarWars = false
 
 hook.Add("PostDrawOpaqueRenderables", "AHDrawAsciiStarWars", function()
     if not drawStarWars then return end
-    -- Notice the scale is small, so text looks crispier
     cam.Start3D2D(Vector(2950, -1959, 955), Angle(0, 180, 90), 0.3)
-    -- Get the size of the text we are about to draw
     local text = GetFrameText()
-    -- Draw some text
     draw.DrawText(text, "DebugFixed", 0, 0, COLOR_WHITE, TEXT_ALIGN_LEFT)
     cam.End3D2D()
 end)
