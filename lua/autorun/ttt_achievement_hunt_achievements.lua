@@ -133,7 +133,7 @@ AHAchievements.gameshow2 = {
 AHAchievements.tester = {
     ["id"] = "tester",
     ["name"] = "You seem to be...",
-    ["desc"] = "Use the tester in the far corner of the map",
+    ["desc"] = "Activate the personality tester in the far corner of the map",
     ["big"] = false,
     ["delay"] = 0
 }
@@ -141,7 +141,7 @@ AHAchievements.tester = {
 AHAchievements.tester2 = {
     ["id"] = "tester2",
     ["name"] = "Prop Hunt",
-    ["desc"] = "Fully test 2 people in the tester",
+    ["desc"] = "Transform 2 people into props using the personality tester",
     ["big"] = true,
     ["delay"] = 0
 }
@@ -165,7 +165,7 @@ AHAchievements.sheep = {
 AHAchievements.disk = {
     ["id"] = "disk",
     ["name"] = "Royalty Free",
-    ["desc"] = "Find the hidden music disc and play it!",
+    ["desc"] = "Find and play the music disk hidden in the main building",
     ["big"] = false,
     ["delay"] = 0
 }
