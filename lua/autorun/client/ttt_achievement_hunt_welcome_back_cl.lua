@@ -226,7 +226,7 @@ local function CreateOverlay()
         end)
     end)
 
-    hook.Add("DrawOverlay", "WelcomeBackRandomatDrawNameOverlay", function()
+    hook.Add("HUDPaint", "WelcomeBackRandomatDrawNameOverlay", function()
         surface.SetAlphaMultiplier(alpha)
 
         for ply, XPos in SortedPairsByValue(overlayPositions) do
@@ -306,6 +306,8 @@ local function CreateOverlay()
             -- Name box drawing
             WordBox(boxBorderSize, XPos, YPos, playerNames[ply], "WelcomeBackRandomatOverlayFont", roleColour, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ply, roleIcons, iconRole)
         end
+
+        surface.SetAlphaMultiplier(1)
     end)
 end
 
