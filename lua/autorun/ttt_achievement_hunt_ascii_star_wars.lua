@@ -1,5 +1,4 @@
 if not ((game.GetMap() == "ttt_achievement_hunt" or game.GetMap() == "ttt_achievement_hunt_final") and engine.ActiveGamemode() == "terrortown") then return end
-if not CLIENT then return end
 local f = file.Open("lua/autorun/ttt_achievement_hunt_ascii.lua", "r", "GAME")
 local frameLines = 13
 local currentFrame = 1
@@ -7,10 +6,18 @@ local drawingFrame = false
 local frame = ""
 local holdFrames = 1
 local fps = 20
+local endOfFile = false
 -- Skip past the initial lua comment out line: "--[["
 f:Skip(6)
 
 local function GetFrameText()
+    if f:EndOfFile() then
+        endOfFile = true
+        f:Close()
+
+        return ""
+    end
+
     if not drawingFrame then
         frame = ""
         holdFrames = 1
@@ -42,10 +49,8 @@ local function GetFrameText()
     return frame
 end
 
-local drawStarWars = false
-
 hook.Add("PostDrawOpaqueRenderables", "AHDrawAsciiStarWars", function()
-    if not drawStarWars then return end
+    if not GetGlobalBool("AHAsciiStarWars") or endOfFile then return end
     cam.Start3D2D(Vector(2950, -1959, 955), Angle(0, 180, 90), 0.3)
     local text = GetFrameText()
     draw.DrawText(text, "DebugFixed", 0, 0, COLOR_WHITE, TEXT_ALIGN_LEFT)
