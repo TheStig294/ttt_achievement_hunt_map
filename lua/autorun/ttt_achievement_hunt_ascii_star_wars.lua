@@ -6,12 +6,16 @@ local currentFrame = 1
 local drawingFrame = false
 local frame = ""
 local holdFrames = 1
+local fps = 20
 print("=====")
 -- Skip past the initial lua comment out line: "--[["
 f:Skip(6)
 
 local function GetFrameText()
     if not drawingFrame then
+        frame = ""
+        holdFrames = 1
+
         for i = 1, frameLines + 1 do
             if i == 1 then
                 holdFrames = f:ReadLine()
@@ -22,7 +26,7 @@ local function GetFrameText()
                 print(line)
 
                 if line then
-                    frame = frame .. line
+                    frame = frame .. line .. "\n"
                 else
                     frame = frame .. "\n"
                 end
@@ -33,7 +37,7 @@ local function GetFrameText()
         drawingFrame = true
 
         -- Right now we're displaying 1 frame per second, doing some maths on this timer delay will change the fps
-        timer.Simple(holdFrames, function()
+        timer.Simple(holdFrames / fps, function()
             drawingFrame = false
         end)
     end
@@ -79,6 +83,6 @@ hook.Add("PostDrawOpaqueRenderables", "AHDrawAsciiStarWars", function()
     surface.SetDrawColor(0, 0, 0, 255)
     surface.DrawRect(-tW / 2 - pad, -pad, tW + pad * 2, tH + pad * 2)
     -- Draw some text
-    draw.SimpleText(text, "Default", -tW / 2, 0, color_white)
+    draw.DrawText(text, "Default", -tW / 2, 0, color_white)
     cam.End3D2D()
 end)
