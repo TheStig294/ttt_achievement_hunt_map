@@ -38,11 +38,6 @@ if SERVER then
 
     CreateConVar("ttt_achievement_hunt_crown_key", "k", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "What key toggles the wearable crown if enabled", 0, 1)
 
-    hook.Add("TTTPrepareRound", "AHSyncCrownConvars", function()
-        SetGlobalBool("ttt_achievement_hunt_crown", GetConVar("ttt_achievement_hunt_crown"):GetBool())
-        SetGlobalString("ttt_achievement_hunt_crown_key", string.lower(GetConVar("ttt_achievement_hunt_crown_key"):GetString()))
-    end)
-
     -- Sets the players that had the crown equipped from last map
     SetGlobalBool("AHCrownObtained", file.Exists("ttt_achievement_hunt/crownplayers.txt", "DATA"))
     AHCrownPlayers = {}
@@ -67,7 +62,7 @@ if SERVER then
                 continue
             end
 
-            if AHCrownPlayers[ply:SteamID()] then
+            if AHCrownPlayers[ply:SteamID()] and not ply.AHCrownShotOff then
                 AHGiveHat(ply, "models/ttt_achievement_hunt/crown.mdl")
             end
         end
@@ -75,7 +70,6 @@ if SERVER then
 
     timer.Create("AHGiveCrownTimer", 1, 0, CheckForCrown)
     hook.Add("TTTBeginRound", "AHGiveCrown", CheckForCrown)
-    hook.Add("TTTPrepareRound", "AHGiveCrown", CheckForCrown)
 
     -- Toggles crown on and off for a player when they press the crown key bind
     net.Receive("AHCrownButtonPressed", function(len, ply)
@@ -93,6 +87,24 @@ if SERVER then
             AHCrownPlayers[id] = nil
             ply:ChatPrint("Crown disabled")
         end
+    end)
+
+    -- Prevents the crown from being replaced if the player has had their crown shot off
+    hook.Add("PlayerTraceAttack", "AHCrownShotOff", function(ply, dmg, dir, trace)
+        if IsValid(ply.hat) and trace.HitGroup == HITGROUP_HEAD then
+            ply.AHCrownShotOff = true
+        end
+    end)
+
+    hook.Add("TTTPrepareRound", "AHCrownPrepareRound", function()
+        SetGlobalBool("ttt_achievement_hunt_crown", GetConVar("ttt_achievement_hunt_crown"):GetBool())
+        SetGlobalString("ttt_achievement_hunt_crown_key", string.lower(GetConVar("ttt_achievement_hunt_crown_key"):GetString()))
+
+        for _, ply in ipairs(player.GetAll()) do
+            ply.AHCrownShotOff = false
+        end
+
+        CheckForCrown()
     end)
 
     hook.Add("ShutDown", "AHSaveCrownPlayers", function()
@@ -124,6 +136,7 @@ if CLIENT then
     end)
 end
 
+------------------- Everything below this line is only run on the ttt_achievement_hunt map ------------------------------
 if not ((game.GetMap() == "ttt_achievement_hunt" or game.GetMap() == "ttt_achievement_hunt_final") and engine.ActiveGamemode() == "terrortown") then return end
 local oneAchievementSpritePos = Vector(2660.538086, -1462.968750, 1662.448486)
 local spriteMaterial = Material("ttt_achievement_hunt/custom_textures/exclamation_mark")
@@ -299,18 +312,18 @@ if SERVER then
                 local textEnt = ents.FindByName("finale_text_1")[1]
                 textEnt:Fire("Display")
 
-                timer.Simple(2, function()
+                timer.Create("AHFinaleText2", 2, 1, function()
                     textEnt = ents.FindByName("finale_text_2")[1]
                     textEnt:Fire("Display")
                 end)
 
-                timer.Simple(4, function()
+                timer.Create("AHFinaleSmoke", 4, 1, function()
                     for _, ent in ipairs(ents.FindByName("finale_smoke")) do
                         ent:Fire("Toggle")
                     end
                 end)
 
-                timer.Simple(8.358, function()
+                timer.Create("AHFinaleSparkStart", 8.358, 1, function()
                     local explosionEnts = ents.FindByName("finale_spark")
 
                     timer.Create("AHFinaleSpark", 0.5, 24, function()
@@ -319,11 +332,11 @@ if SERVER then
                     end)
                 end)
 
-                timer.Simple(15.5, function()
+                timer.Create("AHFinaleScreenShake", 15.5, 1, function()
                     util.ScreenShake(finaleLeverPos, 10, 5, 12, 5000)
                 end)
 
-                timer.Simple(22, function()
+                timer.Create("AHFinaleExplosion", 22, 1, function()
                     local explosionEnts = ents.FindByName("finale_explosion")
 
                     timer.Create("AHFinaleExplosions", 0.5, 12, function()
@@ -336,7 +349,7 @@ if SERVER then
                     end
                 end)
 
-                timer.Simple(27.134, function()
+                timer.Create("AHFinaleEnd", 27.134, 1, function()
                     for _, fadePly in ipairs(player.GetAll()) do
                         fadePly:ScreenFade(SCREENFADE.PURGE, Color(0, 0, 0, 200), 0, 0)
                     end
@@ -354,6 +367,17 @@ if SERVER then
                 end)
             end
         end)
+    end)
+
+    hook.Add("TTTPrepareRound", "AHResetFinaleTimers", function()
+        timer.Remove("AHFinaleText2")
+        timer.Remove("AHFinaleSmoke")
+        timer.Remove("AHFinaleSparkStart")
+        timer.Remove("AHFinaleSpark")
+        timer.Remove("AHFinaleScreenShake")
+        timer.Remove("AHFinaleExplosion")
+        timer.Remove("AHFinaleExplosions")
+        timer.Remove("AHFinaleEnd")
     end)
 
     -- Adds a slash command to reset the progress of all achievements
