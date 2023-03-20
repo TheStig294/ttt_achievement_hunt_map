@@ -1,5 +1,5 @@
-if not ((game.GetMap() == "ttt_achievement_hunt" or game.GetMap() == "ttt_achievement_hunt_final") and engine.ActiveGamemode() == "terrortown") then return end
-local f = file.Open("lua/autorun/ttt_achievement_hunt_ascii.lua", "r", "GAME")
+if not CLIENT or not ((game.GetMap() == "ttt_achievement_hunt" or game.GetMap() == "ttt_achievement_hunt_final") and engine.ActiveGamemode() == "terrortown") then return end
+local f = file.Open("lua/autorun/ttt_achievement_hunt_ascii.lua", "r", "THIRDPARTY")
 local frameLines = 13
 local currentFrame = 1
 local drawingFrame = false
@@ -26,6 +26,16 @@ local function GetFrameText()
             if i == 1 then
                 holdFrames = f:ReadLine()
                 holdFrames = tonumber(holdFrames)
+
+                if not holdFrames then
+                    endOfFile = true
+
+                    if IsValid(f) then
+                        f:Close()
+                    end
+
+                    return ""
+                end
             else
                 local line = f:ReadLine()
 
@@ -50,7 +60,7 @@ local function GetFrameText()
 end
 
 hook.Add("PostDrawOpaqueRenderables", "AHDrawAsciiStarWars", function()
-    if not GetGlobalBool("AHAsciiStarWars") or endOfFile then return end
+    if endOfFile or not GetGlobalBool("AHAsciiStarWars") then return end
     cam.Start3D2D(Vector(2950, -1959, 955), Angle(0, 180, 90), 0.3)
     local text = GetFrameText()
     draw.DrawText(text, "DebugFixed", 0, 0, COLOR_WHITE, TEXT_ALIGN_LEFT)
