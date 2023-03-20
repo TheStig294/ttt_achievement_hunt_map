@@ -1,43 +1,35 @@
-if not CLIENT or not ((game.GetMap() == "ttt_achievement_hunt" or game.GetMap() == "ttt_achievement_hunt_final") and engine.ActiveGamemode() == "terrortown") then return end
-local f = file.Open("lua/autorun/ttt_achievement_hunt_ascii.lua", "r", "THIRDPARTY")
+if not ((game.GetMap() == "ttt_achievement_hunt" or game.GetMap() == "ttt_achievement_hunt_final") and engine.ActiveGamemode() == "terrortown") then return end
+local f = file.Read("lua/autorun/client/ttt_achievement_hunt_ascii.lua", "GAME")
+local lineTable = string.Split(f, "\n")
 local frameLines = 13
-local currentFrame = 1
+local currentFrame = 0
 local drawingFrame = false
 local frame = ""
 local holdFrames = 1
 local fps = 20
 local endOfFile = false
 -- Skip past the initial lua comment out line: "--[["
-f:Skip(6)
+table.remove(lineTable, 1)
 
 local function GetFrameText()
-    if f:EndOfFile() then
-        endOfFile = true
-        f:Close()
-
-        return ""
-    end
-
     if not drawingFrame then
         frame = ""
         holdFrames = 1
 
         for i = 1, frameLines + 1 do
+            local currentLineIndex = currentFrame * (frameLines + 1) + i
+
             if i == 1 then
-                holdFrames = f:ReadLine()
+                holdFrames = lineTable[currentLineIndex]
                 holdFrames = tonumber(holdFrames)
 
                 if not holdFrames then
                     endOfFile = true
 
-                    if IsValid(f) then
-                        f:Close()
-                    end
-
                     return ""
                 end
             else
-                local line = f:ReadLine()
+                local line = lineTable[currentLineIndex]
 
                 if line then
                     frame = frame .. line .. "\n"
@@ -61,7 +53,7 @@ end
 
 hook.Add("PostDrawOpaqueRenderables", "AHDrawAsciiStarWars", function()
     if endOfFile or not GetGlobalBool("AHAsciiStarWars") then return end
-    cam.Start3D2D(Vector(2950, -1959, 955), Angle(0, 180, 90), 0.3)
+    cam.Start3D2D(Vector(2988, -1959, 945), Angle(0, 180, 90), 0.45)
     local text = GetFrameText()
     draw.DrawText(text, "DebugFixed", 0, 0, COLOR_WHITE, TEXT_ALIGN_LEFT)
     cam.End3D2D()
