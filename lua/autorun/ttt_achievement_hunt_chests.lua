@@ -519,8 +519,9 @@ if SERVER then
                             -- If a player is somehow damaged by tom, then both the player and tom make a sound
                             if IsValid(dmg:GetAttacker()) and dmg:GetAttacker() == tom then
                                 timer.Create("AHTomKillCooldown", 0.5, 1, function()
-                                    tom:EmitSound("ttt_achievement_hunt/tom/kill1.mp3")
                                     dmgEnt:EmitSound("ttt_achievement_hunt/tom/kill1.mp3")
+                                    if not IsValid(tom) then return end
+                                    tom:EmitSound("ttt_achievement_hunt/tom/kill1.mp3")
                                 end)
                             end
 
@@ -528,6 +529,7 @@ if SERVER then
                         end
 
                         timer.Create("AHTomHurtCooldown", 0.5, 1, function()
+                            if not IsValid(tom) then return end
                             local randomNum = math.random(1, 12)
                             tom:EmitSound("ttt_achievement_hunt/tom/hurt" .. randomNum .. ".mp3")
                             tom:EmitSound("ttt_achievement_hunt/tom/hurt" .. randomNum .. ".mp3")
@@ -540,6 +542,7 @@ if SERVER then
                         if dmgEnt ~= tom then return end
 
                         timer.Create("AHTomDeathCooldown", 0.5, 1, function()
+                            if not IsValid(tom) then return end
                             local randomNum = math.random(1, 5)
                             tom:EmitSound("ttt_achievement_hunt/tom/death" .. randomNum .. ".mp3")
                             tom:EmitSound("ttt_achievement_hunt/tom/death" .. randomNum .. ".mp3")
