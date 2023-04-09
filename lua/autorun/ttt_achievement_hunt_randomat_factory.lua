@@ -12,7 +12,8 @@ if SERVER then
     hook.Add("EntityRemoved", "AHRandomatPartInsert", function(ent)
         local name = ent:GetName()
         if not isstring(name) then return end
-        if GetRoundState() ~= ROUND_ACTIVE then return end
+        -- if GetRoundState() ~= ROUND_ACTIVE then return end
+        if not (GetGlobalBool("AHEffectInserted") or GetGlobalBool("AHCauseInserted")) then return end
 
         if string.StartWith(name, "cause_") then
             local id = string.sub(name, 7, #name)
@@ -129,12 +130,14 @@ if SERVER then
     local randomatButton
     local namingPlayer
 
-    hook.Add("TTTBeginRound", "AHApplyNearPlayerHook", function()
+    hook.Add("TTTPrepareRound", "AHApplyNearPlayerHook", function()
         -- For enabling the "ShouldCollide" hook to work as a randomat cause
-        for _, ply in ipairs(player.GetAll()) do
-            ply:SetCustomCollisionCheck(true)
-            namingPlayer = nil
-        end
+        timer.Simple(1, function()
+            for _, ply in ipairs(player.GetAll()) do
+                ply:SetCustomCollisionCheck(true)
+                namingPlayer = nil
+            end
+        end)
     end)
 
     -- Preventing players from pressing the make randomat button for various reasons

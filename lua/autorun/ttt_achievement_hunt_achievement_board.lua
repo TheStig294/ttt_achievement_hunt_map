@@ -129,7 +129,7 @@ if CLIENT then
     -- Showing a one-time message each map, to players to remind players of the crown toggle button
     hook.Add("TTTPrepareRound", "AHCrownButtonMessage", function()
         if GetGlobalBool("AHCrownObtained") then
-            chat.AddText("Press '" .. GetGlobalString("ttt_achievement_hunt_crown_key", "k") .. "' to toggle your crown")
+            chat.AddText("Press '" .. string.upper(GetGlobalString("ttt_achievement_hunt_crown_key", "k")) .. "' to toggle your crown")
         end
 
         hook.Remove("TTTPrepareRound", "AHCrownButtonMessage")
