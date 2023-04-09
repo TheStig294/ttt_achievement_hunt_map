@@ -13,7 +13,6 @@ if SERVER then
         local name = ent:GetName()
         if not isstring(name) then return end
         if GetRoundState() ~= ROUND_ACTIVE then return end
-        if not (GetGlobalBool("AHEffectInserted") or GetGlobalBool("AHCauseInserted")) then return end
 
         if string.StartWith(name, "cause_") then
             local id = string.sub(name, 7, #name)
