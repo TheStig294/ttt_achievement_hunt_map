@@ -598,6 +598,7 @@ if CLIENT then
         draw.TexturedQuad(cursorBox)
     end)
 
+    -- Displaying the personality test result text
     net.Receive("AHTestNatureDescription", function()
         local desc = net.ReadString()
         local descTbl = string.ToTable(desc)
@@ -605,7 +606,7 @@ if CLIENT then
         local charCount = 0
         descDisplayed = ""
 
-        timer.Create("AHDisplayDescriptionTimer", 0.075, descLength, function()
+        timer.Create("AHDisplayDescriptionTimer", 0.025, descLength, function()
             charCount = charCount + 1
             surface.PlaySound("ttt_achievement_hunt/custom_sounds/pmd_text.mp3")
             descDisplayed = descDisplayed .. descTbl[charCount]
@@ -617,6 +618,11 @@ if CLIENT then
     end)
 
     net.Receive("AHRemoveTestNatureDescription", function()
+        hook.Remove("DrawOverlay", "AHDrawNatureDescription")
+    end)
+
+    -- Remove the personality test text if the round ends
+    hook.Add("TTTPrepareRound", function()
         hook.Remove("DrawOverlay", "AHDrawNatureDescription")
     end)
 end
