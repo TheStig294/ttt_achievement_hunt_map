@@ -201,7 +201,7 @@ if SERVER then
         net.WriteString(desc)
         net.Send(plys)
 
-        timer.Create("AHTestReset", #desc * 0.075 + 3, 1, function()
+        timer.Create("AHTestReset", #desc * 0.05 + 3, 1, function()
             net.Start("AHRemoveTestNatureDescription")
             net.Broadcast()
             -- Stops the music from looping and fades it out
@@ -606,7 +606,7 @@ if CLIENT then
         local charCount = 0
         descDisplayed = ""
 
-        timer.Create("AHDisplayDescriptionTimer", 0.025, descLength, function()
+        timer.Create("AHDisplayDescriptionTimer", 0.05, descLength, function()
             charCount = charCount + 1
             surface.PlaySound("ttt_achievement_hunt/custom_sounds/pmd_text.mp3")
             descDisplayed = descDisplayed .. descTbl[charCount]
@@ -622,7 +622,7 @@ if CLIENT then
     end)
 
     -- Remove the personality test text if the round ends
-    hook.Add("TTTPrepareRound", function()
+    hook.Add("TTTPrepareRound", "AHRemoveTestNatureDescription", function()
         hook.Remove("DrawOverlay", "AHDrawNatureDescription")
     end)
 end
