@@ -287,12 +287,20 @@ if SERVER then
             local nearPlys = {}
 
             for _, ent in ipairs(nearEnts) do
-                if IsPlayer(ent) then
+                if IsValid(ent) and ent:IsPlayer() then
                     nearPlys[ent] = true
                 end
             end
 
-            if table.Count(nearPlys) < #player.GetHumans() then
+            local alivePlayerCount = 0
+
+            for _, p in ipairs(player.GetAll()) do
+                if p:Alive() and not p:IsSpec() then
+                    alivePlayerCount = alivePlayerCount + 1
+                end
+            end
+
+            if table.Count(nearPlys) < alivePlayerCount then
                 ply:PrintMessage(HUD_PRINTCENTER, "All players must be nearby before activating the reward!")
 
                 for _, farPly in ipairs(player.GetAll()) do
