@@ -119,7 +119,7 @@ local function CalculateBoxWidths()
         if ply:IsSpec() then continue end
 
         if not boxWidths[ply] then
-            surface.SetFont("RoleOverlayFont")
+            surface.SetFont("WelcomeBackRandomatOverlayFont")
             local text = ply:Nick()
             local textWidth = surface.GetTextSize(text)
             local boxWidth = textWidth + boxBorderSize * 2
