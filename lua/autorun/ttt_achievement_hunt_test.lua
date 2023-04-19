@@ -33,6 +33,14 @@ if SERVER then
         end
     end)
 
+    local function PrintCentreShadowed(ply, text)
+        net.Start("AHMapDisplayShadowedText")
+        net.WriteString(text)
+        net.WriteString("PMDFontLarge")
+        net.WriteInt(2, 8)
+        net.Send(ply)
+    end
+
     local function ChooseFirstQuestion(ply, ent)
         SetGlobalBool("AHTestActive", true)
         startTestLever:EmitSound("ttt_achievement_hunt/custom_sounds/test_background.mp3")
@@ -184,11 +192,11 @@ if SERVER then
         for _, nearEnt in ipairs(nearTestEnts) do
             if not IsPlayer(nearEnt) then continue end
             table.insert(plys, nearEnt)
-            nearEnt:PrintMessage(HUD_PRINTCENTER, message)
+            PrintCentreShadowed(nearEnt, message)
 
             timer.Simple(1.9, function()
                 if not nearEnt then return end
-                nearEnt:PrintMessage(HUD_PRINTCENTER, message)
+                PrintCentreShadowed(nearEnt, message)
             end)
         end
 
@@ -232,7 +240,7 @@ if SERVER then
             if IsValid(initPly) and initPly:Alive() and not initPly:IsSpec() then
                 for _, allPly in ipairs(player.GetAll()) do
                     if not IsPlayer(initPly) then continue end
-                    allPly:PrintMessage(HUD_PRINTCENTER, initPly:Nick() .. " has transformed into " .. propName)
+                    PrintCentreShadowed(allPly, initPly:Nick() .. " has transformed into " .. propName)
                     allPly:PrintMessage(HUD_PRINTTALK, initPly:Nick() .. " has transformed into " .. propName)
                 end
             end
@@ -243,7 +251,7 @@ if SERVER then
                     propName = propName .. " If you were alive..."
                 end
 
-                initPly:PrintMessage(HUD_PRINTCENTER, propName)
+                PrintCentreShadowed(initPly, propName)
             end
 
             finishTestCount = finishTestCount + 1
@@ -262,13 +270,13 @@ if SERVER then
         if not string.StartWith(name, "button_test_") then return end
 
         if GetGlobalBool("AHAmongUsEventActive") then
-            ply:PrintMessage(HUD_PRINTCENTER, "Disabled during Among Us event!")
+            PrintCentreShadowed(ply, "Disabled during Among Us event!")
 
             return false
         end
 
         if GetGlobalBool("AHTestOver") then
-            ply:PrintMessage(HUD_PRINTCENTER, "Try again next round!")
+            PrintCentreShadowed(ply, "Try again next round!")
 
             return false
         end
@@ -302,7 +310,7 @@ if SERVER then
 
                     for _, nearEnt in ipairs(nearTestEnts) do
                         if not IsPlayer(nearEnt) then continue end
-                        nearEnt:PrintMessage(HUD_PRINTCENTER, welcomeMsgs[msgIndex])
+                        PrintCentreShadowed(nearEnt, welcomeMsgs[msgIndex])
 
                         -- Ensuring the messages sent to the chat box aren't repeatedly sent, only when the next message is displayed
                         if repsLeft == #welcomeMsgs * 4 - 1 then
@@ -325,7 +333,7 @@ if SERVER then
                 -- Immediately start the test if the intro has been shown before
                 for _, nearEnt in ipairs(nearTestEnts) do
                     if not IsPlayer(nearEnt) then continue end
-                    nearEnt:PrintMessage(HUD_PRINTCENTER, "Time to test your personality, " .. ply:Nick() .. "!")
+                    PrintCentreShadowed(nearEnt, "Time to test your personality, " .. ply:Nick() .. "!")
                     nearEnt:PrintMessage(HUD_PRINTTALK, "Time to test your personality, " .. ply:Nick() .. "!")
                 end
 
@@ -343,7 +351,7 @@ if SERVER then
 
             -- Stop the player from answering a question with a button that isn't being used
             if givenAnswer > #Q.AnswerText then
-                ply:PrintMessage(HUD_PRINTCENTER, "This question doesn't have an answer with that number")
+                PrintCentreShadowed(ply, "This question doesn't have an answer with that number")
 
                 return
             end
@@ -382,7 +390,7 @@ if SERVER then
 
                     for _, nearEnt in ipairs(nearTestEnts) do
                         if not IsPlayer(nearEnt) then continue end
-                        nearEnt:PrintMessage(HUD_PRINTCENTER, "You seem to be...")
+                        PrintCentreShadowed(nearEnt, "You seem to be...")
                         nearEnt:PrintMessage(HUD_PRINTTALK, "You seem to be...")
 
                         timer.Create("AHTestEnd", 2, 1, function()
@@ -461,20 +469,15 @@ if CLIENT then
     -- Draws the test question boxes on the screen if the player is near the test buttons
     surface.CreateFont("PMDFont", {
         font = "PKMN Mystery Dungeon",
-        extended = false,
         size = 24,
         weight = 500,
-        blursize = 0,
-        scanlines = 0,
-        antialias = true,
-        underline = false,
-        italic = false,
-        strikeout = false,
-        symbol = false,
-        rotary = false,
-        shadow = true,
-        additive = false,
-        outline = false,
+        shadow = true
+    })
+
+    surface.CreateFont("PMDFontLarge", {
+        font = "PKMN Mystery Dungeon",
+        size = 36,
+        weight = 500
     })
 
     local boxColour = Color(33, 165, 33)
