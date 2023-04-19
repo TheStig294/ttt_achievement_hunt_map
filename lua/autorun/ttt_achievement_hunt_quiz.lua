@@ -12,6 +12,14 @@ if SERVER then
     local askedQuestions = {}
     local quizStartCount = 0
 
+    local function PrintCentreShadowed(ply, text)
+        net.Start("AHMapDisplayShadowedText")
+        net.WriteString(text)
+        net.WriteString("AHQuizFontLarge")
+        net.WriteInt(2, 8)
+        net.Send(ply)
+    end
+
     hook.Add("Think", "AHQuizRun", function()
         if not QuizActive() then return end
         -- Showing the quiz UI when players are near the quiz buttons after the quiz has begun
@@ -81,7 +89,7 @@ if SERVER then
 
             for _, nearEnt in ipairs(nearQuizEnts) do
                 if not IsPlayer(nearEnt) then continue end
-                nearEnt:PrintMessage(HUD_PRINTCENTER, "You win! Come back next round!")
+                PrintCentreShadowed(nearEnt, "You win! Come back next round!")
                 nearEnt:PrintMessage(HUD_PRINTTALK, "You win! Come back next round!")
             end
         end
@@ -93,13 +101,13 @@ if SERVER then
         if not string.StartWith(name, "button_quiz_") then return end
 
         if GetGlobalBool("AHAmongUsEventActive") then
-            ply:PrintMessage(HUD_PRINTCENTER, "Disabled during Among Us event!")
+            PrintCentreShadowed(ply, "Disabled during Among Us event!")
 
             return false
         end
 
         if GetGlobalBool("AHQuizOver") then
-            ply:PrintMessage(HUD_PRINTCENTER, "Try again next round!")
+            PrintCentreShadowed(ply, "Try again next round!")
 
             return false
         end
@@ -111,7 +119,7 @@ if SERVER then
             SetGlobalEntity("AHBeginQuizButton", ent)
 
             if GetGlobalBool("AHQuizAllQuestionsAsked") then
-                ply:PrintMessage(HUD_PRINTCENTER, "Wow, you've gone through every question! Come back next map!")
+                PrintCentreShadowed(ply, "Wow, you've gone through every question! Come back next map!")
                 AHEarnAchievement("gameshow")
 
                 return false
@@ -140,7 +148,7 @@ if SERVER then
 
                     for _, nearEnt in ipairs(nearQuizEnts) do
                         if not IsPlayer(nearEnt) then continue end
-                        nearEnt:PrintMessage(HUD_PRINTCENTER, welcomeMsgs[msgIndex])
+                        PrintCentreShadowed(nearEnt, welcomeMsgs[msgIndex])
 
                         -- Ensuring the messages sent to the chat box aren't repeatedly sent, only when the next message is displayed
                         if repsLeft == #welcomeMsgs * 4 - 1 then
@@ -163,7 +171,7 @@ if SERVER then
                 -- Immediately start the quiz if the intro has been shown before
                 for _, nearEnt in ipairs(nearQuizEnts) do
                     if not IsPlayer(nearEnt) then continue end
-                    nearEnt:PrintMessage(HUD_PRINTCENTER, "Here's a new set of questions!")
+                    PrintCentreShadowed(nearEnt, "Here's a new set of questions!")
                     nearEnt:PrintMessage(HUD_PRINTTALK, "Here's a new set of questions!")
                 end
 
@@ -189,7 +197,7 @@ if SERVER then
 
             for _, nearEnt in ipairs(nearQuizEnts) do
                 if not IsPlayer(nearEnt) then continue end
-                nearEnt:PrintMessage(HUD_PRINTCENTER, message)
+                PrintCentreShadowed(nearEnt, message)
                 nearEnt:PrintMessage(HUD_PRINTTALK, message)
 
                 if isfunction(answerFunction) then
@@ -201,7 +209,7 @@ if SERVER then
                 if timer.RepsLeft("AHQuizSuspense") >= 2 then
                     for _, nearEnt in ipairs(nearQuizEnts) do
                         if not IsPlayer(nearEnt) then continue end
-                        nearEnt:PrintMessage(HUD_PRINTCENTER, message)
+                        PrintCentreShadowed(nearEnt, message)
                     end
                 end
 
@@ -217,7 +225,7 @@ if SERVER then
 
                         for _, nearEnt in ipairs(nearQuizEnts) do
                             if not IsPlayer(nearEnt) then continue end
-                            nearEnt:PrintMessage(HUD_PRINTCENTER, "CORRECT!")
+                            PrintCentreShadowed(nearEnt, "CORRECT!")
                             nearEnt:PrintMessage(HUD_PRINTTALK, "CORRECT!")
                         end
 
@@ -229,7 +237,7 @@ if SERVER then
 
                         for _, nearEnt in ipairs(nearQuizEnts) do
                             if not IsPlayer(nearEnt) then continue end
-                            nearEnt:PrintMessage(HUD_PRINTCENTER, "Incorrect...")
+                            PrintCentreShadowed(nearEnt, "Incorrect...")
                             nearEnt:PrintMessage(HUD_PRINTTALK, "Incorrect...")
                         end
 
@@ -243,7 +251,7 @@ if SERVER then
                             if GetGlobalInt("AHQuizQuestionNumber", 0) == 3 then
                                 for _, nearEnt in ipairs(nearQuizEnts) do
                                     if not IsPlayer(nearEnt) then continue end
-                                    nearEnt:PrintMessage(HUD_PRINTCENTER, "You correctly answered 3 questions!")
+                                    PrintCentreShadowed(nearEnt, "You correctly answered 3 questions!")
                                     nearEnt:PrintMessage(HUD_PRINTTALK, "You correctly answered 3 questions!")
 
                                     timer.Create("AHQuizPrize", 2, 1, function()
@@ -296,7 +304,7 @@ if SERVER then
                         else
                             for _, nearEnt in ipairs(nearQuizEnts) do
                                 if not IsPlayer(nearEnt) then continue end
-                                nearEnt:PrintMessage(HUD_PRINTCENTER, "Try again next round!")
+                                PrintCentreShadowed(nearEnt, "Try again next round!")
                                 nearEnt:PrintMessage(HUD_PRINTTALK, "Try again next round!")
                             end
                         end
@@ -348,6 +356,12 @@ if CLIENT then
     surface.CreateFont("AHQuizFont", {
         font = "Trebuchet24",
         size = 24,
+        weight = 1000
+    })
+
+    surface.CreateFont("AHQuizFontLarge", {
+        font = "Trebuchet24",
+        size = 48,
         weight = 1000
     })
 

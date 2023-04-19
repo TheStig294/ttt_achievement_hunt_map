@@ -1,11 +1,20 @@
 if not ((game.GetMap() == "ttt_achievement_hunt" or game.GetMap() == "ttt_achievement_hunt_final") and engine.ActiveGamemode() == "terrortown") then return end
+
+local function PrintCentreShadowed(ply, text)
+    net.Start("AHMapDisplayShadowedText")
+    net.WriteString(text)
+    net.WriteString("AHQuizFontLarge")
+    net.WriteInt(2, 8)
+    net.Send(ply)
+    ply:ChatPrint(text)
+end
+
 -- Random prizes for correctly answering 3 questions in one round
 AHQuizPrizes = {}
 
 AHQuizPrizes.health = {
     ["function"] = function(ply)
-        ply:PrintMessage(HUD_PRINTCENTER, "Random prize: Full heal, 2x health!")
-        ply:PrintMessage(HUD_PRINTTALK, "Random prize: Full heal, 2x health!")
+        PrintCentreShadowed(ply, "Random prize: Full heal, 2x health!")
         ply:GetMaxHealth(ply:GetMaxHealth())
         ply:SetHealth(2 * ply:GetMaxHealth())
     end
@@ -13,8 +22,7 @@ AHQuizPrizes.health = {
 
 AHQuizPrizes.knife = {
     ["function"] = function(ply)
-        ply:PrintMessage(HUD_PRINTCENTER, "Random prize: 1-shot knife!")
-        ply:PrintMessage(HUD_PRINTTALK, "Random prize: 1-shot knife!")
+        PrintCentreShadowed(ply, "Random prize: 1-shot knife!")
         local knife = ply:Give("weapon_ttt_knife")
         knife.Primary.Damage = 1000
     end
@@ -22,16 +30,14 @@ AHQuizPrizes.knife = {
 
 AHQuizPrizes.healthstation = {
     ["function"] = function(ply)
-        ply:PrintMessage(HUD_PRINTCENTER, "Random prize: Health station!")
-        ply:PrintMessage(HUD_PRINTTALK, "Random prize: Health station!")
+        PrintCentreShadowed(ply, "Random prize: Health station!")
         ply:Give("weapon_ttt_health_station")
     end
 }
 
 AHQuizPrizes.sprint = {
     ["function"] = function(ply)
-        ply:PrintMessage(HUD_PRINTCENTER, "Random prize: Super sprint!")
-        ply:PrintMessage(HUD_PRINTTALK, "Random prize: Super sprint!")
+        PrintCentreShadowed(ply, "Random prize: Super sprint!")
         ply.OGRunSpeed = ply:GetRunSpeed()
         ply:SetRunSpeed(ply:GetRunSpeed() * 1.5)
     end,
@@ -44,8 +50,7 @@ AHQuizPrizes.sprint = {
 
 AHQuizPrizes.damage = {
     ["function"] = function(ply)
-        ply:PrintMessage(HUD_PRINTCENTER, "Random prize: deal extra damage!")
-        ply:PrintMessage(HUD_PRINTTALK, "Random prize: deal extra damage!")
+        PrintCentreShadowed(ply, "Random prize: deal extra damage!")
         ply.AHDamageBonus = true
 
         hook.Add("EntityTakeDamage", "AHQuizDamageBonus", function(target, dmginfo)
@@ -65,8 +70,7 @@ AHQuizPrizes.damage = {
 
 AHQuizPrizes.damageresist = {
     ["function"] = function(ply)
-        ply:PrintMessage(HUD_PRINTCENTER, "Random prize: damage resistance!")
-        ply:PrintMessage(HUD_PRINTTALK, "Random prize: damage resistance!")
+        PrintCentreShadowed(ply, "Random prize: damage resistance!")
         ply.AHDamageResistance = true
 
         hook.Add("EntityTakeDamage", "AHQuizDamageResistance", function(target, dmginfo)
@@ -83,8 +87,7 @@ AHQuizPrizes.damageresist = {
 
 AHQuizPrizes.regen = {
     ["function"] = function(ply)
-        ply:PrintMessage(HUD_PRINTCENTER, "Random prize: Health Regen!")
-        ply:PrintMessage(HUD_PRINTTALK, "Random prize: Health Regen!")
+        PrintCentreShadowed(ply, "Random prize: Health Regen!")
         ply.AHRegen = true
 
         timer.Create("AHQuizRegen", 1, 0, function()

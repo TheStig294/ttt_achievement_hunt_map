@@ -25,6 +25,7 @@ if SERVER then
     util.AddNetworkString("AHEndRainProp")
     util.AddNetworkString("AHStartNight")
     util.AddNetworkString("AHEndNight")
+    util.AddNetworkString("AHMapDisplayShadowedText")
     SetGlobalBool("AHWelcomeBackButtonPressed", false)
 
     CreateConVar("ttt_achievement_hunt_block_randomat", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Whether the ordinary randomat (not the make-a-randomat feature) should be disabled on ttt_achievement_hunt", 0, 1)
@@ -322,6 +323,32 @@ if CLIENT then
 
             ply.AHRainProp = nil
         end
+    end)
+
+    net.Receive("AHMapDisplayShadowedText", function()
+        local text = net.ReadString()
+        local font = net.ReadString()
+        local displaySecs = net.ReadInt(8)
+        local TextData = {}
+        TextData.color = COLOR_WHITE
+        TextData.font = font
+
+        TextData.pos = {ScrW() / 2, ScrH() / 4}
+
+        TextData.text = text
+        TextData.xalign = TEXT_ALIGN_CENTER
+        TextData.yalign = TEXT_ALIGN_CENTER
+        local shadowDist = 2
+        local shadowAlpha = 255
+
+        hook.Add("DrawOverlay", "AHMapDisplayShadowedText", function()
+            draw.Text(TextData)
+            draw.TextShadow(TextData, shadowDist, shadowAlpha)
+        end)
+
+        timer.Create("AHMapDisplayShadowedText", displaySecs, 1, function()
+            hook.Remove("DrawOverlay", "AHMapDisplayShadowedText")
+        end)
     end)
 end
 
