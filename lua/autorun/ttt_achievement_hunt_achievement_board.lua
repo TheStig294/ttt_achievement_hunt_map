@@ -48,22 +48,22 @@ if SERVER then
     end
 
     local function ShouldNotShowCrown(ply)
-        if Randomat and Randomat.ActiveEvents and Randomat.GetEventsByCategory then
-            for _, event in ipairs(Randomat.ActiveEvents) do
-                if event.Categories and table.HasValue(event.Categories, "modelchange") then return true end
-            end
-        end
-
         return ply:IsSpec() or not ply:Alive() or ply:GetRenderMode() ~= RENDERMODE_NORMAL or ply:GetNoDraw() or ply:GetNWBool("disguised", false) or ply:GetMaterial() == "sprites/heatwave"
     end
 
     -- Re-applies the crown if a player has it on between rounds
+    local modelRandomat = false
+
     local function CheckForCrown()
         if not GetGlobalBool("ttt_achievement_hunt_crown") then return end
 
         -- Check if the player is dead, invisible, or disguised. If so remove the crown
+        if Randomat and Randomat.IsEventCategoryActive then
+            modelRandomat = Randomat:IsEventCategoryActive("modelchange")
+        end
+
         for _, ply in ipairs(player.GetAll()) do
-            if ShouldNotShowCrown(ply) then
+            if modelRandomat or ShouldNotShowCrown(ply) then
                 if IsValid(ply.hat) then
                     ply.hat:Remove()
                     ply.hat = nil
