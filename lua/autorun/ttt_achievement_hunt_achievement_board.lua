@@ -11,7 +11,9 @@ function AHGiveHat(ply, model)
 
     -- Hat doesn't like being set a lot of the time, so attempt to create it twice
     timer.Simple(0, function()
-        hat:SetModel(model)
+        if IsValid(hat) then
+            hat:SetModel(model)
+        end
     end)
 
     timer.Simple(0.1, function()
