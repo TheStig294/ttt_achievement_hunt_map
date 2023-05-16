@@ -49,7 +49,7 @@ CreateConVar("ah_amongus_taskbar_update", 0, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Onl
 
 CreateConVar("ah_amongus_task_threshhold", 60, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Seconds until tasks/guns aren't found too quickly", 0, 120)
 
-CreateConVar("ah_amongus_sprinting", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Enable sprinting during the randomat", 0, 1)
+local sprintingCvar = CreateConVar("ah_amongus_sprinting", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Enable sprinting during the randomat", 0, 1)
 
 CreateConVar("ah_amongus_music", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Play the Among Us drip music", 0, 1)
 
@@ -71,6 +71,7 @@ local secondsPassedVoting = 0
 local numaliveplayers = 0
 local meetingActiveTimeLeft = 0
 local traitorCount = 0
+local sprintingWasOn = false
 SetGlobalBool("AHAmongUsEventActive", false)
 
 local dripMusic = {Sound("ttt_achievement_hunt/amongus/dripmusic1.mp3"), Sound("ttt_achievement_hunt/amongus/dripmusic2.mp3"), Sound("ttt_achievement_hunt/amongus/dripmusic3.mp3")}
@@ -809,6 +810,13 @@ local function Begin()
         AHAmongUsVote(finder:Nick())
     end)
 
+    -- Disabling sprinting
+    if not sprintingCvar:GetBool() then
+        sprintingWasOn = GetGlobalBool("ttt_sprint_enabled")
+        SetGlobalBool("ttt_sprint_enabled", false)
+        AddHook("TTTSprintStaminaPost", function() return 0 end)
+    end
+
     timer.Create("AHAmongUsPlayTimer", 1, 0, function()
         playTimeCount = playTimeCount + 1
     end)
@@ -995,6 +1003,11 @@ local function End()
         net.Broadcast()
         -- Disallowing the randomat end function from being run again until the randomat is activated again
         SetGlobalBool("AHAmongUsEventActive", false)
+
+        -- Re-enabling sprinting
+        if sprintingWasOn then
+            SetGlobalBool("ttt_sprint_enabled", true)
+        end
     end
 end
 

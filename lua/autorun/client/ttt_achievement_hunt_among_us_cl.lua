@@ -106,6 +106,7 @@ net.Receive("AHAmongUsEventBegin", function()
 
     -- Disabling Sprinting if the convar is enabled
     if GetGlobalBool("ah_amongus_sprinting") == false then
+        hook.Add("TTTSprintStaminaPost", "AHAmongUsStopSprintStamina", function() return 0 end)
         hook.Remove("Think", "TTTSprintThink")
         hook.Remove("Think", "TTTSprint4Think")
     end
@@ -488,6 +489,7 @@ net.Receive("AHAmongUsEventRoundEnd", function()
     hook.Remove("SetupWorldFog", "AHAmongUsWorldFog")
     hook.Remove("SetupSkyboxFog", "AHAmongUsSkyboxFog")
     hook.Remove("DrawOverlay", "AHAmongUsTaskUI")
+    hook.Remove("TTTSprintStaminaPost", "AHAmongUsStopSprintStamina")
     hook.Remove("TTTPlayerSpeedModifier", "AHAmongUsPlayerSpeed")
     hook.Remove("HUDPaint", "AHAmongUsSpriteReactor")
     hook.Remove("HUDPaint", "AHAmongUsSpriteO2O2")
