@@ -44,6 +44,7 @@ if SERVER then
 
         SetGlobalBool(name .. "_opened", true)
         ply.AHOpenedChest = true
+        ent:Fire("Toggle")
 
         timer.Create("AchievementHuntChestUseCooldown", 0.1, 1, function()
             if name == "chest_mattymel" then
