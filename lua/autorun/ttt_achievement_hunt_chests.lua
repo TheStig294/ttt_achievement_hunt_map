@@ -664,7 +664,7 @@ if SERVER then
                         ply:SetMaterial("sprites/heatwave")
                     else
                         ply:SetColor(Color(255, 255, 255, 255))
-                        ply:SetMaterial("models/glass")
+                        ply:SetMaterial("")
                     end
                 end)
             end
@@ -707,7 +707,7 @@ if SERVER then
 
         if IsValid(ravsChestPlayer) then
             ravsChestPlayer:SetColor(Color(255, 255, 255, 255))
-            ravsChestPlayer:SetMaterial("models/glass")
+            ravsChestPlayer:SetMaterial("")
             SetGlobalEntity("AHRavsChestPlayer", nil)
             hook.Remove("PlayerButtonDown", "AHRavsChestCrouch")
             hook.Remove("PlayerButtonUp", "AHRavsChestUncrouch")
