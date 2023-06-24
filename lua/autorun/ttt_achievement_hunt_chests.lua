@@ -451,6 +451,7 @@ if SERVER then
                     tom:SetHealth(100)
                     tom:SetMaxHealth(100)
                     tom:SetNWString("PlayerName", "Angor")
+                    tom:SetName("Angor")
                     tom:Give("weapon_zm_sledge")
                     tom:SelectWeapon("weapon_zm_sledge")
                     SendFullStateUpdate()
