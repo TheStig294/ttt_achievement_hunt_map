@@ -450,8 +450,10 @@ if SERVER then
                     tom:SetRole(ROLE_OLDMAN or ROLE_INNOCENT)
                     tom:SetHealth(100)
                     tom:SetMaxHealth(100)
-                    tom:SetNWString("PlayerName", "Angor")
-                    tom:SetName("Angor")
+                    timer.Simple(0.5, function()
+                        tom:SetNWString("PlayerName", "Angor")
+                        tom:SetName("Angor")
+                    end)
                     tom:Give("weapon_zm_sledge")
                     tom:SelectWeapon("weapon_zm_sledge")
                     SendFullStateUpdate()
@@ -762,39 +764,6 @@ if CLIENT then
                 -- Don't draw a halo around Tom if he's dead
                 if not tom:Alive() or tom:IsSpec() then return end
                 halo.Add(tomTable, Color(0, 255, 0), 0, 0, 1, true, true)
-            end)
-
-            -- Changing the name of the tom bot to "Angor" on the scoreboard
-            hook.Add("TTTScoreboardPlayerName", "AHTomScoreboardName", function(ply, client, currentName)
-                if not IsValid(tom) then
-                    hook.Remove("TTTScoreboardPlayerName", "AHTomScoreboardName")
-
-                    return
-                end
-
-                if ply == tom then return "Angor" end
-            end)
-
-            -- Changing the name of the tom bot to "Angor" when players look at them
-            hook.Add("TTTTargetIDPlayerName", "AHTomName", function(ply, client, text, clr)
-                if not IsValid(tom) then
-                    hook.Remove("TTTTargetIDPlayerName", "AHTomName")
-
-                    return
-                end
-
-                if ply == tom then return "Angor", clr end
-            end)
-
-            -- Changing the name of the tom bot to "Angor" when players look at them
-            hook.Add("TTTScoringSummaryRender", "AHTomNameSummary", function(ply, roleFileName, groupingRole, roleColor, nameLabel, startingRole, finalRole)
-                if not IsValid(tom) then
-                    hook.Remove("TTTScoringSummaryRender", "AHTomNameSummary")
-
-                    return
-                end
-
-                if ply == tom then return roleFileName, groupingRole, roleColor, "Angor" end
             end)
 
             -- Removing the halo at the end of the round
