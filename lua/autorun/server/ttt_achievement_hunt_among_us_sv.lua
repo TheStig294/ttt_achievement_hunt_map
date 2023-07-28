@@ -225,6 +225,12 @@ local function ForceResetAllPlayermodels()
     end
 end
 
+local function HandleReplicatedValue(onreplicated, onglobal)
+    if isfunction(CRVersion) and CRVersion("1.9.3") then return onreplicated() end
+
+    return onglobal()
+end
+
 local function AHAmongUsVoteEnd()
     -- Unfreeze all players, if convar enabled
     if GetConVar("ah_amongus_freeze"):GetBool() then
@@ -813,7 +819,7 @@ local function Begin()
     -- Disabling sprinting
     -- CR Replicated convar
     if not sprintingCvar:GetBool() then
-        Randomat:HandleReplicatedValue(function()
+        HandleReplicatedValue(function()
             sprintingWasOn = GetConVar("ttt_sprint_enabled"):GetBool()
             GetConVar("ttt_sprint_enabled"):SetBool(false)
         end, function()
@@ -1014,7 +1020,7 @@ local function End()
         -- Re-enabling sprinting
         -- CR Replicated convar
         if sprintingWasOn then
-            Randomat:HandleReplicatedValue(function()
+            HandleReplicatedValue(function()
                 GetConVar("ttt_sprint_enabled"):SetBool(true)
             end, function()
                 SetGlobalBool("ttt_sprint_enabled", true)
