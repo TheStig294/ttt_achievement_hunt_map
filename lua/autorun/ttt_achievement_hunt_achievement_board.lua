@@ -159,7 +159,6 @@ if SERVER then
     util.AddNetworkString("AHOneAchievementLeftIndicator")
     local earnedAchievements = {}
     local fileContent
-    local totalAchievementCount
     local finaleLeverPos = Vector(2658, -1502, 2500)
     local leverPressed = false
 
@@ -203,8 +202,6 @@ if SERVER then
                 end
             end
         end)
-
-        totalAchievementCount = table.Count(AHAchievements)
     end)
 
     hook.Add("TTTPrepareRound", "AHAchievmentResets", function()
@@ -238,6 +235,7 @@ if SERVER then
         -- Prints a message to everyone to mention an achievement still to earn
         timer.Simple(4, function()
             local earnedAchievementCount = table.Count(earnedAchievements)
+            local totalAchievementCount = table.Count(AHAchievements)
 
             for id, achievement in RandomPairs(AHAchievements) do
                 if earnedAchievements[id] then continue end
