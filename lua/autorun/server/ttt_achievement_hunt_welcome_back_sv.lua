@@ -70,7 +70,7 @@ util.AddNetworkString("WelcomeBackEnd")
 
 local function Begin()
     -- Puts the intro popup on the screen for all players
-    local randomIntroSound = "ttt_achievement_hunt/custom_sounds/intro" .. math.random(1, 3) .. ".mp3"
+    local randomIntroSound = "ttt_achievement_hunt/custom_sounds/intro" .. math.random(3) .. ".mp3"
     net.Start("WelcomeBackPopup")
     net.WriteString(randomIntroSound)
     net.Broadcast()

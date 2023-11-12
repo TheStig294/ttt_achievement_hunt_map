@@ -244,7 +244,7 @@ if CLIENT then
 
     local function ShowMessage(big, msg, length)
         if msg == "AHMemeRandomatEffect" then
-            msg = memeASCII[math.random(1, #memeASCII)]
+            msg = memeASCII[math.random(#memeASCII)]
         end
 
         if length == 0 then

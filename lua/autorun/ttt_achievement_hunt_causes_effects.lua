@@ -233,7 +233,7 @@ AHEffects.timeofday = {
 
             local relays = {"day", "night", "clear", "rain"}
 
-            local relay = "relay_" .. relays[math.random(1, #relays)]
+            local relay = "relay_" .. relays[math.random(#relays)]
 
             for _, ent in ipairs(ents.FindByName(relay)) do
                 ent:Fire("Trigger")

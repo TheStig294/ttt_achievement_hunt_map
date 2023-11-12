@@ -344,10 +344,10 @@ if SERVER then
                 end)
 
                 timer.Create("AHFinaleSparkStart", 8.358, 1, function()
-                    local explosionEnts = ents.FindByName("finale_spark")
+                    local sparkEnts = ents.FindByName("finale_spark")
 
                     timer.Create("AHFinaleSpark", 0.5, 24, function()
-                        local spark = table.Random(explosionEnts)
+                        local spark = sparkEnts[math.random(#sparkEnts)]
                         spark:Fire("SparkOnce")
                     end)
                 end)
@@ -360,7 +360,7 @@ if SERVER then
                     local explosionEnts = ents.FindByName("finale_explosion")
 
                     timer.Create("AHFinaleExplosions", 0.5, 12, function()
-                        local explosion = table.Random(explosionEnts)
+                        local explosion = explosionEnts[math.random(#explosionEnts)]
                         explosion:Fire("Explode")
                     end)
 

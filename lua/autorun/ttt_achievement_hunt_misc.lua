@@ -80,7 +80,7 @@ if SERVER then
             net.Broadcast()
 
             timer.Create("AHThunderSoundLoop", 30, 0, function()
-                local snd = "ttt_achievement_hunt/minecraft_sounds/thunder" .. math.random(1, 3) .. ".mp3"
+                local snd = "ttt_achievement_hunt/minecraft_sounds/thunder" .. math.random(3) .. ".mp3"
                 net.Start("AHThunderSound")
                 net.WriteString(snd)
                 net.Broadcast()
@@ -136,9 +136,9 @@ if SERVER then
                 ent:Remove()
                 AHEarnAchievement("hat")
             elseif playedStillAlive then
-                -- Making "Still Alive" play when the 1st 5 notes of the song are played in the correct order, in minecraft note block sounds!
                 return false
             elseif name == "button_note_g" then
+                -- Making "Still Alive" play when the 1st 5 notes of the song are played in the correct order, in minecraft note block sounds!
                 lastCorrectNotePlayed = "g"
             elseif name == "button_note_f" then
                 if lastCorrectNotePlayed == "g" then
@@ -162,7 +162,7 @@ if SERVER then
                     -- Song is 129 seconds long, so 2*129 = 258
                     -- Press random note block buttons until the song is over
                     timer.Create("PressRandomNoteBlockButtons", 0.2, 645, function()
-                        local button = noteBlockButtons[math.random(1, #noteBlockButtons)]
+                        local button = noteBlockButtons[math.random(#noteBlockButtons)]
 
                         if not IsValid(button) then
                             timer.Remove("PressRandomNoteBlockButtons")

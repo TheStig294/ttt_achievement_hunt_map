@@ -450,10 +450,12 @@ if SERVER then
                     tom:SetRole(ROLE_OLDMAN or ROLE_INNOCENT)
                     tom:SetHealth(100)
                     tom:SetMaxHealth(100)
+
                     timer.Simple(0.5, function()
                         tom:SetNWString("PlayerName", "Angor")
                         tom:SetName("Angor")
                     end)
+
                     tom:Give("weapon_zm_sledge")
                     tom:SelectWeapon("weapon_zm_sledge")
                     SendFullStateUpdate()
@@ -534,7 +536,7 @@ if SERVER then
 
                         timer.Create("AHTomHurtCooldown", 0.5, 1, function()
                             if not IsValid(tom) then return end
-                            local randomNum = math.random(1, 12)
+                            local randomNum = math.random(12)
                             tom:EmitSound("ttt_achievement_hunt/tom/hurt" .. randomNum .. ".mp3")
                             tom:EmitSound("ttt_achievement_hunt/tom/hurt" .. randomNum .. ".mp3")
                         end)
@@ -547,7 +549,7 @@ if SERVER then
 
                         timer.Create("AHTomDeathCooldown", 0.5, 1, function()
                             if not IsValid(tom) then return end
-                            local randomNum = math.random(1, 5)
+                            local randomNum = math.random(5)
                             tom:EmitSound("ttt_achievement_hunt/tom/death" .. randomNum .. ".mp3")
                             tom:EmitSound("ttt_achievement_hunt/tom/death" .. randomNum .. ".mp3")
                         end)
@@ -591,7 +593,7 @@ if SERVER then
                                     end
                                 end
 
-                                local randomNum = math.random(1, 10)
+                                local randomNum = math.random(10)
                                 tom:EmitSound("ttt_achievement_hunt/tom/bump" .. randomNum .. ".mp3")
                                 tom:EmitSound("ttt_achievement_hunt/tom/bump" .. randomNum .. ".mp3")
 
