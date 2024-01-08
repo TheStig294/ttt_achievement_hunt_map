@@ -305,7 +305,7 @@ if SERVER then
             local alivePlayerCount = 0
 
             for _, p in ipairs(player.GetAll()) do
-                if p:Alive() and not p:IsSpec() then
+                if p:Alive() and not p:IsSpec() and not p:IsBot() then
                     alivePlayerCount = alivePlayerCount + 1
                 end
             end
