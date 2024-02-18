@@ -32,12 +32,19 @@ if SERVER then
         end
 
         -- Prevents the senate's chest from erroring when the player cap is reached
-        if player.GetCount() == game.MaxPlayers() and name == "chest_senate" then
+        if name == "chest_senate" and player.GetCount() == game.MaxPlayers() then
             ply:PrintMessage(HUD_PRINTCENTER, "Max players! Someone must disconnect!")
 
             timer.Create("AHMaxPlayerWarning", 0.1, 1, function()
                 ply:PrintMessage(HUD_PRINTTALK, "Server's max players reached! Someone must disconnect for this chest to work!")
             end)
+
+            return false
+        end
+
+        -- Prevent opening Mal's chest during rain as it makes it too hard to see
+        if name == "chest_mal" and GetGlobalBool("AHRain") then
+            ply:PrintMessage(HUD_PRINTCENTER, "This chest can't be opened while it's raining")
 
             return false
         end
