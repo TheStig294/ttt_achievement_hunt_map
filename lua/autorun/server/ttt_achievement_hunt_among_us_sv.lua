@@ -243,7 +243,6 @@ local function AHAmongUsVoteEnd()
         end
 
         RunConsoleCommand("phys_timescale", "1")
-        RunConsoleCommand("ragdoll_sleepaftertime", "1")
     end
 
     -- Tally up votes and the players who are alive and can therefore vote
@@ -464,7 +463,6 @@ local function AHAmongUsVote(findername, emergencyMeeting)
         end
 
         RunConsoleCommand("phys_timescale", "0")
-        RunConsoleCommand("ragdoll_sleepaftertime", "0")
         removeHurt = true
     end
 
@@ -1007,7 +1005,6 @@ local function End()
         timer.Remove("AHAmongUsSabotageO2")
         timer.Remove("AHAmongUsSabotageReactor")
         RunConsoleCommand("phys_timescale", "1")
-        RunConsoleCommand("ragdoll_sleepaftertime", "1")
         -- Close the vote window if it is open
         net.Start("AHAmongUsVoteEnd")
         net.Broadcast()
