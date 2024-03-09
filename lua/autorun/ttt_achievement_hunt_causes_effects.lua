@@ -221,31 +221,22 @@ AHEffects.fling = {
     }
 }
 
-AHEffects.timeofday = {
-    ["id"] = "timeofday",
+AHEffects.speed = {
+    ["id"] = "speed",
     ["PropID"] = 4,
-    ["Desc"] = "the weather or time of day sometimes changes",
+    ["Desc"] = "your speed is randomly changed!",
     ["Functions"] = {
         function(arg1, arg2)
             local ply = CheckForPlayer(arg1, arg2)
             if not ply then return end
-            if ply.AHRelayRandomatCooldown then return end
-
-            local relays = {"day", "night", "clear", "rain"}
-
-            local relay = "relay_" .. relays[math.random(#relays)]
-
-            for _, ent in ipairs(ents.FindByName(relay)) do
-                ent:Fire("Trigger")
-            end
-
-            ply.AHRelayRandomatCooldown = true
-
-            timer.Create("AHRelayRandomatCooldown" .. ply:EntIndex(), 10, 1, function()
-                ply.AHRelayRandomatCooldown = false
-            end)
+            ply:SetLaggedMovementValue(math.random() * 2 + 0.2)
         end
-    }
+    },
+    ["Reset"] = function()
+        for _, ply in ipairs(player.GetAll()) do
+            ply:SetLaggedMovementValue(1)
+        end
+    end
 }
 
 local models
