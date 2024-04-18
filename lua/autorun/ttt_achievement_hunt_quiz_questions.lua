@@ -202,20 +202,15 @@ AHQuizQuestions.forevertraitor = {
         ["d"] = "Wtf is a 'Forever traitor'?"
     },
     ["CorrectAnswer"] = function(ply, ent)
-        if ply.IsInnocentTeam and ply:IsInnocentTeam() then
-            return "a"
-        elseif ply:GetRole() == ROLE_INNOCENT or ply:GetRole() == ROLE_DETECTIVE then
-            return "a"
-        else
+        if ply:GetRole() == ROLE_TRAITOR or (ply.IsTraitorTeam and ply:IsTraitorTeam()) then
             return "b"
+        else
+            return "a"
         end
     end,
     ["AnswerFunctions"] = {
         ["a"] = function(ply, ent)
-            if ply.IsInnocentTeam and not ply:IsInnocentTeam() then
-                ply:Kill()
-                ply:ChatPrint("You broke forever traitor!")
-            elseif ply:GetRole() == ROLE_TRAITOR then
+            if ply:GetRole() == ROLE_TRAITOR or (ply.IsTraitorTeam and ply:IsTraitorTeam()) then
                 ply:Kill()
                 ply:ChatPrint("You broke forever traitor!")
             end
