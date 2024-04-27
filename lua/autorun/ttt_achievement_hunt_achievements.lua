@@ -132,7 +132,7 @@ AHAchievements.gameshow2 = {
 
 AHAchievements.tester = {
     ["id"] = "tester",
-    ["name"] = "You seem to be...",
+    ["name"] = "Propsonality",
     ["desc"] = "Activate the personality tester in the far corner of the map",
     ["big"] = false,
     ["delay"] = 0

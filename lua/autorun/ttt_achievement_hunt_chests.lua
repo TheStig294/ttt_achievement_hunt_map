@@ -688,16 +688,7 @@ if SERVER then
         end)
     end)
 
-    -- Unlock and close chests if they haven't been opened before
-    -- (The map has been set up so the chests spawn already open)
     hook.Add("TTTPrepareRound", "AHCloseChests", function()
-        for _, ent in ipairs(ents.FindByName("chest_*")) do
-            if not GetGlobalBool(ent:GetName() .. "_opened") then
-                ent:Fire("Unlock")
-                ent:Fire("Close")
-            end
-        end
-
         -- Reset any player who opened the Bruce chest to not appear as a pig anymore
         local pigPlayer = GetGlobalEntity("AHPigModelPlayer", nil)
 
@@ -740,6 +731,17 @@ if SERVER then
                 if ply.oldViewOffsetDucked then
                     ply:SetViewOffsetDucked(ply.oldViewOffsetDucked)
                     ply.oldViewOffsetDucked = nil
+                end
+            end
+
+            -- Unlock and close chests if they haven't been opened before
+            -- (The map has been set up so the chests spawn already open)
+            for _, ent in ipairs(ents.FindByName("chest_*")) do
+                print(ent, ent:GetName(), GetGlobalBool(ent:GetName() .. "_opened"))
+
+                if not GetGlobalBool(ent:GetName() .. "_opened") then
+                    ent:Fire("Unlock")
+                    ent:Fire("Close")
                 end
             end
         end)

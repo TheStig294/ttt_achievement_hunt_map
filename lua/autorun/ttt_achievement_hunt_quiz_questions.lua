@@ -542,3 +542,16 @@ AHQuizQuestions.tneconni = {
         end
     }
 }
+
+AHQuizQuestions.remember = {
+    ["Asked"] = false,
+    ["ID"] = "remember",
+    ["QuestionText"] = "Do you still remember? Or are you lost?",
+    ["AnswerText"] = {
+        ["a"] = "4, 8, 16, 24, 42",
+        ["b"] = "4, 8, 15, 16, 23, 42",
+        ["c"] = "4, 9, 16, 24, 42",
+        ["d"] = "Red, Blue, Red, Yellow"
+    },
+    ["CorrectAnswer"] = "b"
+}

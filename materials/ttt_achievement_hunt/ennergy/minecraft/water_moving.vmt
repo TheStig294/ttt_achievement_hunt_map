@@ -28,14 +28,10 @@
 		}
 
 		"TextureScroll"
-			{
-				"texturescrollvar"	"$basetexturetransform"
-				"texturescrollrate"	"0.4"
-				"texturescrollangle"	"0"
-			}
-
-	"WaterLOD"
 		{
+			"texturescrollvar"	"$basetexturetransform"
+			"texturescrollrate"	"0.4"
+			"texturescrollangle"	"0"
 		}
 	}
 }
