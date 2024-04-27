@@ -114,53 +114,57 @@ _ttt_achievement_hunt_block_among_us_ 0
 
 Track: Disfigure - Blank [NCS Release]\
 Music provided by NoCopyrightSounds.\
-Watch: <https://youtu.be/p7ZsBPK656s> \
-Free Download / Stream: <https://ncs.io/Blank>
-
+Watch: <https://youtu.be/p7ZsBPK656s>\
+Free Download / Stream: <https://ncs.io/Blank>\
+\
 'Ambience, Night Wildlife, A' by InspectorJ\
-<https://freesound.org/people/InspectorJ/sounds/352514/> \
-License: <https://creativecommons.org/licenses/by/4.0/>
-
-'Late Night Radio' Kevin MacLeod (<https://incompetech.com>) \
-Licensed under Creative Commons: By Attribution 4.0 License \
-<http://creativecommons.org/licenses/by/4.0/>
-
-'Cartoon Toy Whistle' by Mixkit (<https://mixkit.co/free-sound-effects/cartoon/>) \
-Licensed under Mixkit Sound Effects Free License \
-<https://mixkit.co/license/#sfxFree>
-
-'Custom Comic Book Font' by bdcraft.net \
-<https://bdcraft.net/downloads/purebdcraft-minecraft/font-addon/> \
-Licensed under SIL OPEN FONT LICENSE \
-<https://scripts.sil.org/OFL>
-
-'steam long.wav' by Hampusnoren \
-<https://freesound.org/people/Hampusnoren/sounds/564936/> \
-License: <https://creativecommons.org/licenses/by/4.0/>
-
-'Happy Happy Game Show' Kevin MacLeod (incompetech.com) \
-Licensed under Creative Commons: By Attribution 4.0 License \
-<http://creativecommons.org/licenses/by/4.0/>
-
-'Among Us Crewmate + Corpse Model' by JuanG3D \
-Licensed under Creative Commons: By Attribution 4.0 License \
-<http://creativecommons.org/licenses/by/4.0/>
-
+<https://freesound.org/people/InspectorJ/sounds/352514/>\
+License: <https://creativecommons.org/licenses/by/4.0/>\
+\
+'Late Night Radio' Kevin MacLeod (<https://incompetech.com>)\
+Licensed under Creative Commons: By Attribution 4.0 License\
+<http://creativecommons.org/licenses/by/4.0/>\
+\
+'Cartoon Toy Whistle' by Mixkit (<https://mixkit.co/free-sound-effects/cartoon/>)\
+Licensed under Mixkit Sound Effects Free License\
+<https://mixkit.co/license/#sfxFree>\
+\
+'Custom Comic Book Font' by bdcraft.net\
+<https://bdcraft.net/downloads/purebdcraft-minecraft/font-addon/>\
+Licensed under SIL OPEN FONT LICENSE\
+<https://scripts.sil.org/OFL>\
+\
+'steam long.wav' by Hampusnoren\
+<https://freesound.org/people/Hampusnoren/sounds/564936/>\
+License: <https://creativecommons.org/licenses/by/4.0/>\
+\
+'Happy Happy Game Show' Kevin MacLeod (incompetech.com)\
+Licensed under Creative Commons: By Attribution 4.0 License\
+<http://creativecommons.org/licenses/by/4.0/>\
+\
+'Among Us Crewmate + Corpse Model' by JuanG3D\
+Licensed under Creative Commons: By Attribution 4.0 License\
+<http://creativecommons.org/licenses/by/4.0/>\
+\
 Among Us playermodel by Bytewave and Adam:\
-<https://steamcommunity.com/sharedfiles/filedetails/?id=2313802230> \
-<https://github.com/NotMyWing/GarrysModAmongUs/blob/master/LICENSE_ART>
-
-White icons used in achievement notifications from game-icons.net \
-Licensed under Creative Commons: By Attribution 3.0 License \
-<http://creativecommons.org/licenses/by/3.0/>
-
+<https://steamcommunity.com/sharedfiles/filedetails/?id=2313802230>\
+<https://github.com/NotMyWing/GarrysModAmongUs/blob/master/LICENSE_ART>\
+\
+White icons used in achievement notifications from game-icons.net\
+Licensed under Creative Commons: By Attribution 3.0 License\
+<http://creativecommons.org/licenses/by/3.0/>\
+\
 'Fall Guys Crown' model (<https://skfb.ly/6W9SB>) by PatelDev\
 Rigged into a wearable hat in Gmod by The Stig\
 Licensed under Creative Commons: By Attribution 4.0 License\
-<http://creativecommons.org/licenses/by/4.0/>
-
+<http://creativecommons.org/licenses/by/4.0/>\
+\
 Majority of map textures from PureBDcraft\
-ResourcePack by <https://bdcraft.net>
+ResourcePack by <https://bdcraft.net>\
+\
+'Confirm Beeps.wav' by SilverIllusionist\
+<https://freesound.org/s/664261/>\
+License: <https://creativecommons.org/licenses/by/4.0/>
 \
 \
 If you want to use any of this work, for example the Sphax texture ports I made, go right ahead!\
