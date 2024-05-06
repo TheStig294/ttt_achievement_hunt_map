@@ -737,8 +737,6 @@ if SERVER then
             -- Unlock and close chests if they haven't been opened before
             -- (The map has been set up so the chests spawn already open)
             for _, ent in ipairs(ents.FindByName("chest_*")) do
-                print(ent, ent:GetName(), GetGlobalBool(ent:GetName() .. "_opened"))
-
                 if not GetGlobalBool(ent:GetName() .. "_opened") then
                     ent:Fire("Unlock")
                     ent:Fire("Close")
