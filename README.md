@@ -1,6 +1,5 @@
-_This is a map for Garry's Mod TTT, the below is a copy from the map's steam workshop page:_ <https://steamcommunity.com/sharedfiles/filedetails/?id=2857904452>
-
-# Welcome, to a high-effort, crazy TTT map
+# TTT Achievement Hunt Map
+**Welcome, to a high-effort, crazy TTT map**
 
 Yes, it's a Minecraft map, but _trust me_, this is not like any other TTT map you've played before, this map has some pretty cool stuff to it!
 
@@ -170,3 +169,6 @@ License: <https://creativecommons.org/licenses/by/4.0/>
 If you want to use any of this work, for example the Sphax texture ports I made, go right ahead!\
 Just make sure to give the same credit as I did if you're using something listed above.\
 (And I would appreciate it if you gave me similar credit as well!)
+
+## Steam Workshop Link
+https://steamcommunity.com/sharedfiles/filedetails/?id=2857904452
