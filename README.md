@@ -94,19 +94,19 @@ Turns on/off allowing the secret Among Us event to start, if toggled, this will 
 \
 \
 __Map Settings__\
-//Whether the wearable crown is enabled or not\
+Whether the wearable crown is enabled or not\
 _ttt_achievement_hunt_crown_ 1
 
-//What key toggles the wearable crown if enabled\
+What key toggles the wearable crown if enabled\
 _ttt_achievement_hunt_crown_key_ k
 
-//Whether the ordinary randomat (not the make-a-randomat feature) should be disabled\
+Whether the ordinary randomat (not the make-a-randomat feature) should be disabled\
 _ttt_achievement_hunt_block_randomat_ 1
 
-//Whether the 'make your own randomat' feature should be disabled\
+Whether the 'make your own randomat' feature should be disabled\
 _ttt_achievement_hunt_block_randomat_factory_ 0
 
-//Whether the Among Us event should be disabled\
+Whether the Among Us event should be disabled\
 _ttt_achievement_hunt_block_among_us_ 0
 
 # Credits
