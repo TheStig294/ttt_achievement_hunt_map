@@ -151,7 +151,7 @@ AHEffects.bighead = {
         end
     },
     ["Reset"] = function()
-        for _, ply in ipairs(player.GetAll()) do
+        for _, ply in player.Iterator() do
             ply.HeadScale = 1
         end
     end
@@ -175,7 +175,7 @@ AHEffects.randomat = {
         end
     },
     ["Reset"] = function()
-        for _, ply in ipairs(player.GetAll()) do
+        for _, ply in player.Iterator() do
             ply.AHRandomatEffectTriggered = false
         end
     end
@@ -229,12 +229,21 @@ AHEffects.speed = {
         function(arg1, arg2)
             local ply = CheckForPlayer(arg1, arg2)
             if not ply then return end
-            ply:SetLaggedMovementValue(math.random() * 2 + 0.2)
+            local mult = math.random() * 2 + 0.2
+            -- These are the values TTT sets by default whenever a player respawns
+            -- I found them in player_ext.lua inside plymeta:InitialSpawn()
+            ply:SetCrouchedWalkSpeed(0.3 * mult)
+            ply:SetRunSpeed(220 * mult)
+            ply:SetWalkSpeed(220 * mult)
+            ply:SetMaxSpeed(220 * mult)
         end
     },
     ["Reset"] = function()
-        for _, ply in ipairs(player.GetAll()) do
-            ply:SetLaggedMovementValue(1)
+        for _, ply in player.Iterator() do
+            ply:SetCrouchedWalkSpeed(0.3)
+            ply:SetRunSpeed(220)
+            ply:SetWalkSpeed(220)
+            ply:SetMaxSpeed(220)
         end
     end
 }
