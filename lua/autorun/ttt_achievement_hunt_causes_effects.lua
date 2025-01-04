@@ -4,13 +4,13 @@ local function CheckForPlayer(arg1, arg2)
     local ply = false
 
     if GetGlobalInt("AHRandomatCause", 0) == 7 then
-        if IsPlayer(arg1) and IsPlayer(arg2) then
+        if IsValid(arg1) and arg1:IsPlayer() and IsValid(arg2) and arg2:IsPlayer() then
             ply = arg1
         end
     else
-        if IsPlayer(arg1) then
+        if IsValid(arg1) and arg1:IsPlayer() then
             ply = arg1
-        elseif IsPlayer(arg2) then
+        elseif IsValid(arg2) and arg2:IsPlayer() then
             ply = arg2
         end
     end
@@ -137,7 +137,7 @@ AHEffects.bighead = {
                 timer.Simple(0.1, function()
                     local ent = arg1
                     local ply = CORPSE.GetPlayer(ent)
-                    if not IsPlayer(ply) then return end
+                    if not (IsValid(ply) and ply:IsPlayer()) then return end
                     local mult = ply.HeadScale or 1.2
                     local scale = Vector(mult, mult, mult)
                     local boneId = ent:LookupBone("ValveBiped.Bip01_Head1")
