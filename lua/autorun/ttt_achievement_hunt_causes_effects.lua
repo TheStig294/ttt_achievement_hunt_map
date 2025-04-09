@@ -7,16 +7,10 @@ end
 local function CheckForPlayer(arg1, arg2)
     local ply = false
 
-    if GetGlobalInt("AHRandomatCause", 0) == 7 then
-        if SafeIsPlayer(arg1) and SafeIsPlayer(arg2) then
-            ply = arg1
-        end
-    else
-        if SafeIsPlayer(arg1) then
-            ply = arg1
-        elseif SafeIsPlayer(arg2) then
-            ply = arg2
-        end
+    if SafeIsPlayer(arg1) then
+        ply = arg1
+    elseif SafeIsPlayer(arg2) then
+        ply = arg2
     end
 
     return ply
@@ -32,11 +26,11 @@ AHCauses.death = {
     ["Desc"] = "After you die"
 }
 
-AHCauses.near = {
-    ["id"] = "near",
+AHCauses.interact = {
+    ["id"] = "interact",
     ["PropID"] = 7,
-    ["Hooks"] = {"ShouldCollide"},
-    ["Desc"] = "After you get near another player"
+    ["Hooks"] = {"PlayerUse"},
+    ["Desc"] = "After you interact with something"
 }
 
 AHCauses.buy = {
