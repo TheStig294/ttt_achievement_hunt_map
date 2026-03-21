@@ -749,14 +749,26 @@ end
 if CLIENT then
     -- Drawing an outline around the Tom NPC when spawned after opening Tom's chest
     net.Receive("AHDrawTomChestHalo", function()
-        chat.AddText(Color(156, 253, 156), "Player Angor has joined the game")
+        chat.AddText(CustomChat and Color(0, 128, 255) or Color(156, 253, 156), "Player Angor has joined the game")
 
         -- Suppressing the "Bot01 has joined the game" message from appearing
         hook.Add("ChatText", "AHSupressTomJoinMessage", function(index, name, text, type)
             if type == "joinleave" then return true end
         end)
 
+        -- Support for the Custom Chat mod, which returns true in the "ChatText" hook and prevents the hook above from running
+        local customChatOldConnect
+
+        if CustomChat and CustomChat.JoinLeave then
+            customChatOldConnect = CustomChat.JoinLeave.showConnect
+            CustomChat.JoinLeave.showConnect = true
+        end
+
         timer.Simple(3, function()
+            if CustomChat and CustomChat.JoinLeave then
+                CustomChat.JoinLeave.showConnect = customChatOldConnect
+            end
+
             hook.Remove("ChatText", "AHSupressTomJoinMessage")
             local tom = player.GetBots()[#player.GetBots()]
 
