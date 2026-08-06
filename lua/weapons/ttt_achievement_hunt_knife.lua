@@ -35,7 +35,6 @@ SWEP.Secondary.Automatic = true
 SWEP.Secondary.Ammo = "none"
 SWEP.Secondary.Delay = 1.4
 SWEP.Kind = WEAPON_EQUIP
-SWEP.WeaponID = AMMO_KNIFE
 SWEP.AllowDrop = false
 SWEP.IsSilent = true
 -- Pull out faster than standard guns
@@ -47,7 +46,7 @@ function SWEP:PrimaryAttack()
     if not IsValid(self:GetOwner()) then return end
     self:GetOwner():LagCompensation(true)
     local spos = self:GetOwner():GetShootPos()
-    local sdest = spos + (self:GetOwner():GetAimVector() * 70)
+    local sdest = spos + self:GetOwner():GetAimVector() * 70
     local kmins = Vector(1, 1, 1) * -10
     local kmaxs = Vector(1, 1, 1) * 10
 
@@ -97,7 +96,7 @@ function SWEP:PrimaryAttack()
         -- account we do want to avoid rounding error strangeness caused by
         -- other damage scaling, causing a death when we don't expect one, so
         -- when the target's health is close to kill-point we just kill
-        if hitEnt:Health() < (self.Primary.Damage + 10) then
+        if hitEnt:Health() < self.Primary.Damage + 10 then
             self:StabKill(tr, spos, sdest)
         else
             local dmg = DamageInfo()
@@ -107,7 +106,7 @@ function SWEP:PrimaryAttack()
             dmg:SetDamageForce(self:GetOwner():GetAimVector() * 5)
             dmg:SetDamagePosition(self:GetOwner():GetPos())
             dmg:SetDamageType(DMG_SLASH)
-            hitEnt:DispatchTraceAttack(dmg, spos + (self:GetOwner():GetAimVector() * 3), sdest)
+            hitEnt:DispatchTraceAttack(dmg, spos + self:GetOwner():GetAimVector() * 3, sdest)
         end
     end
 
@@ -148,7 +147,7 @@ function SWEP:StabKill(tr, spos, sdest)
     end
 
     -- seems the spos and sdest are purely for effects/forces?
-    target:DispatchTraceAttack(dmg, spos + (self:GetOwner():GetAimVector() * 3), sdest)
+    target:DispatchTraceAttack(dmg, spos + self:GetOwner():GetAimVector() * 3, sdest)
     -- target appears to die right there, so we could theoretically get to
     -- the ragdoll in here...
     self:Remove()
@@ -158,8 +157,8 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:Equip()
-    self:SetNextPrimaryFire(CurTime() + (self.Primary.Delay * 1.5))
-    self:SetNextSecondaryFire(CurTime() + (self.Secondary.Delay * 1.5))
+    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay * 1.5)
+    self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay * 1.5)
 end
 
 function SWEP:PreDrop()
@@ -179,7 +178,7 @@ if CLIENT then
     function SWEP:DrawHUD()
         local tr = self:GetOwner():GetEyeTrace(MASK_SHOT)
 
-        if tr.HitNonWorld and IsValid(tr.Entity) and tr.Entity:IsPlayer() and tr.Entity:Health() < (self.Primary.Damage + 10) then
+        if tr.HitNonWorld and IsValid(tr.Entity) and tr.Entity:IsPlayer() and tr.Entity:Health() < self.Primary.Damage + 10 then
             local x = ScrW() / 2.0
             local y = ScrH() / 2.0
             surface.SetDrawColor(255, 0, 0, 255)
