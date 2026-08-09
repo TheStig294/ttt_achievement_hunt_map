@@ -157,6 +157,16 @@ net.Receive("AHAmongUsEventBegin", function()
 
     -- Adds the taskbar after the among us intro popups are done
     timer.Simple(11, function()
+        local x = 19.6
+        local y = ScrH() - 59
+
+        if CR_VERSION then
+            hook.Add("TTTHUDInfoPaint", "AHAmongUsUIPos", function(client, _, _, _, hudx, hudy)
+                x = hudx + 9.6
+                y = hudy + 75
+            end)
+        end
+
         -- Drawing the taskbar
         hook.Add("DrawOverlay", "AHAmongUsTaskUI", function()
             if GetGlobalBool("ah_amongus_taskbar_update") and meeting then
@@ -164,7 +174,6 @@ net.Receive("AHAmongUsEventBegin", function()
             end
 
             local text = string.format("%i / %02i", foundweps, totalwepcount) .. " Guns To Win"
-            local y = ScrH() - 59
 
             -- Prevents the taskbar appearing while dead, paused or when tasks are removed
             if LocalPlayer():Alive() and not LocalPlayer():IsSpec() and GetGlobalBool("AHAmongUsGunWinRemove") == false and gui.IsGameUIVisible() == false then
@@ -172,13 +181,13 @@ net.Receive("AHAmongUsEventBegin", function()
                 texttable.font = "HealthAmmo"
                 texttable.color = COLOR_WHITE
 
-                texttable.pos = {135, y + 25}
+                texttable.pos = {x + 125, y + 25}
 
                 texttable.text = text
                 texttable.xalign = TEXT_ALIGN_CENTER
                 texttable.yalign = TEXT_ALIGN_BOTTOM
-                draw.RoundedBox(5, 19.6, y, 233, 28, Color(46, 65, 43, 255))
-                draw.RoundedBox(5, 19.6, y, (foundweps / totalwepcount) * 233, 28, Color(67, 216, 68, 255))
+                draw.RoundedBox(5, x, y, 233, 28, Color(46, 65, 43, 255))
+                draw.RoundedBox(5, x, y, (foundweps / totalwepcount) * 233, 28, Color(67, 216, 68, 255))
                 draw.TextShadow(texttable, 2)
             end
         end)
@@ -488,6 +497,7 @@ net.Receive("AHAmongUsEventRoundEnd", function()
     hook.Remove("PlayerBindPress", "AHAmongUsRandomatBuyMenuDisable")
     hook.Remove("SetupWorldFog", "AHAmongUsWorldFog")
     hook.Remove("SetupSkyboxFog", "AHAmongUsSkyboxFog")
+    hook.Remove("TTTHUDInfoPaint", "AHAmongUsUIPos")
     hook.Remove("DrawOverlay", "AHAmongUsTaskUI")
     hook.Remove("TTTSprintStaminaPost", "AHAmongUsStopSprintStamina")
     hook.Remove("TTTPlayerSpeedModifier", "AHAmongUsPlayerSpeed")
