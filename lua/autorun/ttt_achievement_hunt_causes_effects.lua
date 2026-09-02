@@ -280,7 +280,7 @@ AHEffects.health = {
         function(arg1, arg2)
             local ply = CheckForPlayer(arg1, arg2)
             if not ply then return end
-            ply:SetHealth(math.random(100))
+            ply:SetHealth(math.random(math.ceil(ply:GetMaxHealth())))
         end
     }
 }
